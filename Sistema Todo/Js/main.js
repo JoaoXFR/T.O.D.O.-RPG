@@ -1,5 +1,5 @@
 /**
- * T.O.D.O. — Tecnologia Operacional de Dossiês Ocultos
+ * TODO — RPG
  * Main JavaScript — Interactivity, Animations & Particles
  */
 
@@ -24,8 +24,8 @@ handleHeaderScroll(); // run on load
 /* ══════════════════════════════════════════════════════════════
    MOBILE NAVIGATION TOGGLE
 ══════════════════════════════════════════════════════════════ */
-const navToggle   = document.getElementById('nav-toggle');
-const mobileMenu  = document.getElementById('mobile-menu');
+const navToggle = document.getElementById('nav-toggle');
+const mobileMenu = document.getElementById('mobile-menu');
 
 navToggle.addEventListener('click', () => {
   const isOpen = mobileMenu.classList.toggle('open');
@@ -45,18 +45,38 @@ mobileMenu.querySelectorAll('a').forEach(link => {
 });
 
 /* ══════════════════════════════════════════════════════════════
-   SMOOTH SCROLL — NAV LINKS
+   TAB NAVIGATION SYSTEM
 ══════════════════════════════════════════════════════════════ */
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-  anchor.addEventListener('click', function (e) {
-    const targetId = this.getAttribute('href');
-    if (targetId === '#') return;
-    const target = document.querySelector(targetId);
-    if (!target) return;
+const tabLinks = document.querySelectorAll('.tab-link');
+const tabSections = document.querySelectorAll('.tab-section');
+
+tabLinks.forEach(link => {
+  link.addEventListener('click', function (e) {
+    if (!this.hasAttribute('data-target')) return;
+
     e.preventDefault();
-    const headerHeight = siteHeader.offsetHeight;
-    const targetY = target.getBoundingClientRect().top + window.scrollY - headerHeight - 20;
-    window.scrollTo({ top: targetY, behavior: 'smooth' });
+    const target = this.getAttribute('data-target');
+
+    // Deactivate all
+    tabLinks.forEach(l => l.classList.remove('active-nav'));
+    tabSections.forEach(s => s.classList.remove('active-tab'));
+
+    // Activate target
+    document.querySelectorAll(`.tab-link[data-target="${target}"]`).forEach(l => l.classList.add('active-nav'));
+    document.querySelectorAll(`.tab-section[data-tab="${target}"]`).forEach(s => s.classList.add('active-tab'));
+
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // Mobile menu close
+    const mobileMenu = document.getElementById('mobile-menu');
+    const navToggle = document.getElementById('nav-toggle');
+    if (mobileMenu && mobileMenu.classList.contains('open')) {
+      mobileMenu.classList.remove('open');
+      navToggle.classList.remove('open');
+      navToggle.setAttribute('aria-expanded', 'false');
+      mobileMenu.setAttribute('aria-hidden', 'true');
+    }
   });
 });
 
@@ -94,9 +114,9 @@ function setupScrollReveal() {
       }
       // Stagger delay for grid items
       if (el.classList.contains('feature-item') ||
-          el.classList.contains('tool-card') ||
-          el.classList.contains('pricing-card') ||
-          el.classList.contains('testimonial-card')) {
+        el.classList.contains('tool-card') ||
+        el.classList.contains('pricing-card') ||
+        el.classList.contains('testimonial-card')) {
         el.style.transitionDelay = `${idx * 0.08}s`;
       }
     });
@@ -159,23 +179,23 @@ if (heroStats) statsObserver.observe(heroStats);
 /* ══════════════════════════════════════════════════════════════
    PARTICLE CANVAS — HERO BACKGROUND
 ══════════════════════════════════════════════════════════════ */
-const canvas  = document.getElementById('particles-canvas');
-const ctx     = canvas ? canvas.getContext('2d') : null;
+const canvas = document.getElementById('particles-canvas');
+const ctx = canvas ? canvas.getContext('2d') : null;
 let particles = [];
 let animationId;
 
 function resizeCanvas() {
   if (!canvas) return;
-  canvas.width  = canvas.offsetWidth;
+  canvas.width = canvas.offsetWidth;
   canvas.height = canvas.offsetHeight;
 }
 
 function createParticle() {
   return {
-    x:    Math.random() * canvas.width,
-    y:    Math.random() * canvas.height,
-    vx:   (Math.random() - 0.5) * 0.3,
-    vy:   (Math.random() - 0.5) * 0.3 - 0.1, // slight upward drift
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    vx: (Math.random() - 0.5) * 0.3,
+    vy: (Math.random() - 0.5) * 0.3 - 0.1, // slight upward drift
     size: Math.random() * 1.5 + 0.3,
     alpha: Math.random() * 0.5 + 0.1,
     alphaDir: (Math.random() > 0.5 ? 1 : -1) * 0.003,
@@ -278,11 +298,11 @@ const rollValue = document.querySelector('.roll-value');
 const rollStatus = document.querySelector('.roll-status');
 
 const statusMap = [
-  { min: 1,  max: 4,  text: 'Falha Crítica!',   cls: 'fail' },
-  { min: 5,  max: 9,  text: 'Falha',             cls: 'fail' },
-  { min: 10, max: 14, text: 'Sucesso Parcial',   cls: 'partial' },
-  { min: 15, max: 19, text: 'Sucesso',           cls: 'success' },
-  { min: 20, max: 20, text: 'Sucesso Crítico!',  cls: 'success' },
+  { min: 1, max: 4, text: 'Falha Crítica!', cls: 'fail' },
+  { min: 5, max: 9, text: 'Falha', cls: 'fail' },
+  { min: 10, max: 14, text: 'Sucesso Parcial', cls: 'partial' },
+  { min: 15, max: 19, text: 'Sucesso', cls: 'success' },
+  { min: 20, max: 20, text: 'Sucesso Crítico!', cls: 'success' },
 ];
 
 // Inject missing CSS for fail/partial
@@ -352,33 +372,13 @@ const mockupWindow = document.querySelector('.mockup-window');
 if (mockupWindow) mockupObserver.observe(mockupWindow);
 
 /* ══════════════════════════════════════════════════════════════
-   ACTIVE NAV LINK — SCROLL SPY
+   ACTIVE NAV LINK — BASE STYLE
 ══════════════════════════════════════════════════════════════ */
-const sections = document.querySelectorAll('section[id]');
-const navLinks  = document.querySelectorAll('.nav-links a');
-
-const spyObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      navLinks.forEach(link => {
-        link.classList.toggle(
-          'active-nav',
-          link.getAttribute('href') === `#${entry.target.id}`
-        );
-      });
-    }
-  });
-}, {
-  threshold: 0.3,
-  rootMargin: '-80px 0px -40% 0px',
-});
-
-sections.forEach(s => spyObserver.observe(s));
-
 // Inject active nav link style
 const navStyle = document.createElement('style');
 navStyle.textContent = `
-  .nav-links a.active-nav {
+  .nav-links a.active-nav,
+  .nav-logo.active-nav {
     color: var(--color-text) !important;
   }
   .nav-links a.active-nav::after {
@@ -394,7 +394,7 @@ const heroSigil = document.querySelector('.hero-sigil');
 
 if (heroSigil && window.matchMedia('(min-width: 768px)').matches) {
   window.addEventListener('mousemove', (e) => {
-    const cx = window.innerWidth  / 2;
+    const cx = window.innerWidth / 2;
     const cy = window.innerHeight / 2;
     const dx = (e.clientX - cx) / cx;
     const dy = (e.clientY - cy) / cy;
@@ -417,7 +417,7 @@ if (prefersReducedMotion.matches) {
 }
 
 /* ══════════════════════════════════════════════════════════════
-   GLITCH TEXT EFFECT — T.O.D.O. LOGO
+   GLITCH TEXT EFFECT — TODO LOGO
 ══════════════════════════════════════════════════════════════ */
 const logoAcronym = document.querySelector('.logo-acronym');
 
@@ -510,7 +510,7 @@ if (window.matchMedia('(pointer: fine)').matches && !prefersReducedMotion.matche
     glowX += (targetX - glowX) * 0.08;
     glowY += (targetY - glowY) * 0.08;
     glow.style.left = glowX + 'px';
-    glow.style.top  = glowY + 'px';
+    glow.style.top = glowY + 'px';
     requestAnimationFrame(animateGlow);
   }
   animateGlow();
@@ -520,8 +520,231 @@ if (window.matchMedia('(pointer: fine)').matches && !prefersReducedMotion.matche
    INITIALIZATION LOG
 ══════════════════════════════════════════════════════════════ */
 console.log(
-  '%cT.O.D.O.%c — Tecnologia Operacional de Dossiês Ocultos\n%cSistema inicializado. Bem-vindo, Agente.',
+  '%cTODO%c — Plataforma Paranormal\n%cSistema inicializado. Bem-vindo, Agente.',
   'font-size:24px; font-family: serif; color: #e8234a; font-weight: bold;',
   'font-size:12px; color: #9ca3b0;',
   'font-size:11px; color: #5c6474; font-style: italic;'
 );
+
+/* ══════════════════════════════════════════════════════════════
+   APP STATE & LOCALSTORAGE MANAGER
+══════════════════════════════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', () => {
+
+  // --- STATS GLOBALS ---
+  const globalAgentEl = document.getElementById('global-agent-count');
+  const globalCampEl = document.getElementById('global-campaign-count');
+  const globalSessEl = document.getElementById('global-sessions-count');
+
+  function updateGlobalStats() {
+    if (globalAgentEl) globalAgentEl.innerText = localStorage.getItem('todo_agent_count') || '0';
+    if (globalCampEl) globalCampEl.innerText = localStorage.getItem('todo_camp_count') || '0';
+    if (globalSessEl) globalSessEl.innerText = localStorage.getItem('todo_sess_count') || '0';
+  }
+
+  // Record a session visit purely for effect
+  let sessCount = parseInt(localStorage.getItem('todo_sess_count') || '0');
+  if (!sessionStorage.getItem('todo_active_session')) {
+    sessCount++;
+    localStorage.setItem('todo_sess_count', sessCount);
+    sessionStorage.setItem('todo_active_session', 'true');
+  }
+
+  // --- AGENTS DASHBOARD ---
+  const maxAgents = 30;
+  let agentCount = parseInt(localStorage.getItem('todo_agent_count') || '0');
+  const counterEl = document.getElementById('agente-counter');
+  const emptyStateEl = document.getElementById('agent-empty-state');
+  const btnTopCreate = document.getElementById('btn-top-create-agent');
+  const btnCenterCreate = document.getElementById('btn-center-create-agent');
+  const gridContainer = document.getElementById('agents-grid-container');
+
+  function renderAgentCards() {
+    document.querySelectorAll('.app-created-agent').forEach(el => el.remove());
+    for (let i = 0; i < agentCount; i++) {
+      createAgentDOM();
+    }
+    updateCounterSystem();
+  }
+
+  function updateCounterSystem() {
+    localStorage.setItem('todo_agent_count', agentCount);
+    if (counterEl) counterEl.innerText = `Agentes: ${agentCount}/${maxAgents}`;
+    if (emptyStateEl) emptyStateEl.style.display = (agentCount === 0) ? 'flex' : 'none';
+    updateGlobalStats();
+  }
+
+  function createAgentDOM() {
+    const card = document.createElement('div');
+    card.className = 'agent-dash-card app-created-agent';
+    const dateStr = new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: '2-digit' });
+
+    card.innerHTML = `
+      <button class="agent-dash-settings btn-remove-agent" aria-label="Remover Agente">
+        <i class="fas fa-trash" style="color: var(--color-red-light);"></i>
+      </button>
+      <div class="dash-card-content">
+        <div class="dash-card-avatar empty"><i class="fas fa-user-secret"></i></div>
+        <div class="dash-card-info">
+          <h4>Novo Agente</h4>
+          <span class="dash-card-class">Recruta</span>
+          <span class="dash-card-date">Criado em ${dateStr}</span>
+        </div>
+      </div>
+      <div class="dash-card-footer">
+        <button class="btn btn-primary btn-sm">Acessar Ficha</button>
+      </div>
+    `;
+
+    card.querySelector('.btn-remove-agent').addEventListener('click', () => {
+      card.remove();
+      agentCount--;
+      updateCounterSystem();
+    });
+
+    if (gridContainer && emptyStateEl) gridContainer.insertBefore(card, emptyStateEl);
+  }
+
+  function handleCreateAgent() {
+    if (agentCount >= maxAgents) return alert("Lotação Máxima! Você já tem 30 agentes.");
+    agentCount++;
+    createAgentDOM();
+    updateCounterSystem();
+  }
+
+  if (btnTopCreate) btnTopCreate.addEventListener('click', handleCreateAgent);
+  if (btnCenterCreate) btnCenterCreate.addEventListener('click', handleCreateAgent);
+
+  // --- CAMPAIGNS DASHBOARD ---
+  const maxCamps = 10;
+  let campCount = parseInt(localStorage.getItem('todo_camp_count') || '0');
+  const campCounterEl = document.getElementById('campaign-counter');
+  const campEmptyStateEl = document.getElementById('campaign-empty-state');
+  const btnTopCamp = document.getElementById('btn-top-create-campaign');
+  const btnCenterCamp = document.getElementById('btn-center-create-campaign');
+  const campGrid = document.getElementById('campaigns-grid-container');
+
+  function renderCamps() {
+    document.querySelectorAll('.app-created-camp').forEach(el => el.remove());
+    for (let i = 0; i < campCount; i++) createCampDOM();
+    updateCampCounter();
+  }
+
+  function updateCampCounter() {
+    localStorage.setItem('todo_camp_count', campCount);
+    if (campCounterEl) campCounterEl.innerText = `Campanhas: ${campCount}/${maxCamps}`;
+    if (campEmptyStateEl) campEmptyStateEl.style.display = (campCount === 0) ? 'flex' : 'none';
+    updateGlobalStats();
+  }
+
+  function createCampDOM() {
+    const card = document.createElement('div');
+    card.className = 'agent-dash-card app-created-camp';
+
+    card.innerHTML = `
+      <button class="agent-dash-settings btn-remove-camp" aria-label="Remover">
+        <i class="fas fa-trash" style="color: var(--color-red-light);"></i>
+      </button>
+      <div class="dash-card-content">
+        <div class="dash-card-avatar empty"><i class="fas fa-book-dead"></i></div>
+        <div class="dash-card-info">
+          <h4>Nova Investigação</h4>
+          <span class="dash-card-class">Status: Preparação</span>
+          <span class="dash-card-date">Mestre: Você</span>
+        </div>
+      </div>
+      <div class="dash-card-footer">
+        <button class="btn btn-outline btn-sm">Abrir Mesa</button>
+      </div>
+    `;
+
+    card.querySelector('.btn-remove-camp').addEventListener('click', () => {
+      card.remove();
+      campCount--;
+      updateCampCounter();
+    });
+
+    if (campGrid && campEmptyStateEl) campGrid.insertBefore(card, campEmptyStateEl);
+  }
+
+  function handleCreateCamp() {
+    if (campCount >= maxCamps) return alert("Limite Atingido! Máximo de 10 Campanhas.");
+    campCount++;
+    createCampDOM();
+    updateCampCounter();
+  }
+
+  if (btnTopCamp) btnTopCamp.addEventListener('click', handleCreateCamp);
+  if (btnCenterCamp) btnCenterCamp.addEventListener('click', handleCreateCamp);
+
+  // --- FORUM ENGINE ---
+  const forumInput = document.getElementById('forum-input');
+  const btnPostForum = document.getElementById('btn-post-forum');
+  const forumFeed = document.getElementById('forum-feed-container');
+
+  let posts = JSON.parse(localStorage.getItem('todo_forum_posts') || '[]');
+
+  function saveAndRenderPosts() {
+    localStorage.setItem('todo_forum_posts', JSON.stringify(posts));
+    if (!forumFeed) return;
+    forumFeed.innerHTML = '';
+
+    if (posts.length === 0) {
+      forumFeed.innerHTML = '<p style="color: var(--color-text-3); text-align: center; padding: 2rem;">O canal está silencioso. Seja o primeiro a relatar.</p>';
+      return;
+    }
+
+    posts.forEach((post, index) => {
+      const pDiv = document.createElement('div');
+      pDiv.style = "background: var(--color-surface); padding: 1.25rem; border: 1px solid var(--color-border); border-radius: var(--radius-sm); border-left: 3px solid var(--color-red-dark);";
+      pDiv.innerHTML = `
+        <div style="display: flex; gap: 1rem;">
+          <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--color-bg); display: grid; place-items: center; border: 1px solid var(--color-border); flex-shrink: 0;"><i class="fas fa-user" style="color: var(--color-text-3);"></i></div>
+          <div style="flex: 1;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+              <strong style="color: var(--color-text); font-size: 0.9rem;">Agente Anônimo</strong>
+              <small style="color: var(--color-text-3); font-family: var(--font-mono); font-size: 0.7rem;">${post.date}</small>
+            </div>
+            <p style="color: var(--color-text-2); font-size: 0.9rem; line-height: 1.5; margin-bottom: 1rem;">${post.text}</p>
+            <div style="display: flex; gap: 1rem;">
+              <button class="btn-like-post" data-index="${index}" style="background: none; border: none; color: ${post.liked ? 'var(--color-red-light)' : 'var(--color-text-3)'}; cursor: pointer; display: flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; transition: color 0.2s;">
+                <i class="fas fa-heart"></i> ${post.likes}
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+
+      const likeBtn = pDiv.querySelector('.btn-like-post');
+      likeBtn.addEventListener('click', () => {
+        post.liked = !post.liked;
+        post.likes += post.liked ? 1 : -1;
+        saveAndRenderPosts();
+      });
+
+      forumFeed.appendChild(pDiv);
+    });
+  }
+
+  if (btnPostForum && forumInput) {
+    btnPostForum.addEventListener('click', () => {
+      const text = forumInput.value.trim();
+      if (!text) return;
+      const now = new Date();
+      posts.unshift({
+        text: text,
+        date: now.toLocaleDateString() + ' ' + now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        likes: 0,
+        liked: false
+      });
+      forumInput.value = '';
+      saveAndRenderPosts();
+    });
+  }
+
+  // --- STARTUP ---
+  updateGlobalStats();
+  renderAgentCards();
+  renderCamps();
+  saveAndRenderPosts();
+});

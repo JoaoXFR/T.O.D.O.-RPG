@@ -1,4 +1,4 @@
-# T.O.D.O. — Tecnologia Operacional de Dossiês Ocultos
+# TODO — RPG
 
 > Plataforma digital paranormal para fichas e campanhas de RPG, inspirada no CRIS Ordem Paranormal.
 
@@ -6,7 +6,7 @@
 
 ## 🎯 Objetivo
 
-Site de apresentação/landing page para o **T.O.D.O.**, uma plataforma de fichas digitais e ferramentas para jogadores e mestres de RPG Ordem Paranormal. Design dark e atmosférico com identidade visual única.
+Site de apresentação/landing page para o **TODO**, uma plataforma de fichas digitais e ferramentas para jogadores e mestres de RPG Ordem Paranormal. Design dark e atmosférico com identidade visual única.
 
 ---
 
@@ -20,7 +20,7 @@ Site de apresentação/landing page para o **T.O.D.O.**, uma plataforma de ficha
 - [x] Scroll suave entre seções
 
 ### Seções
-- [x] **Hero** — Título T.O.D.O., descrição, CTAs e estatísticas animadas
+- [x] **Hero** — Título TODO, descrição, CTAs e estatísticas animadas
 - [x] **Fichas Digitais** — Mockup interativo de ficha de agente com rolagem de dados
 - [x] **Agentes** — Grid de agentes com status online/offline
 - [x] **Ferramentas para o Mestre** — Grid de 6 ferramentas com ícones coloridos
@@ -37,7 +37,7 @@ Site de apresentação/landing page para o **T.O.D.O.**, uma plataforma de ficha
 - [x] Auto-rolagem de demonstração no mockup
 - [x] Scroll spy — link ativo no nav conforme seção visível
 - [x] Efeito parallax no símbolo do hero (mouse)
-- [x] Efeito glitch no logo T.O.D.O.
+- [x] Efeito glitch no logo TODO
 - [x] Efeito de digitação (typewriter) no subtítulo
 - [x] Cursor glow suave (somente desktop)
 - [x] Suporte a `prefers-reduced-motion`
@@ -123,4 +123,4 @@ README.md           → Este arquivo
 
 ---
 
-*T.O.D.O. é um projeto de fã independente, não afiliado oficialmente com Ordem Paranormal ou Cellbit.*
+*TODO é um projeto de fã independente, não afiliado oficialmente com Ordem Paranormal ou Cellbit.*

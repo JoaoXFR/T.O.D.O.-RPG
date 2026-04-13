@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>T.O.D.O. — Plataforma Paranormal</title>
+  <title>TODO — Plataforma Paranormal</title>
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Inter:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Share+Tech+Mono&display=swap"
+    rel="stylesheet" />
 
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" />
@@ -16,6 +19,7 @@
   <!-- Main Stylesheet -->
   <link rel="stylesheet" href="css/style.css" />
 </head>
+
 <body>
 
   <!-- ============================================================
@@ -28,22 +32,21 @@
   ============================================================ -->
   <header id="site-header" role="banner">
     <nav id="main-nav" aria-label="Navegação principal">
-      <a href="#hero-section" class="nav-logo" aria-label="T.O.D.O. — Início">
-        <span class="logo-acronym">T.O.D.O.</span>
+      <a href="#home" class="nav-logo tab-link" data-target="home" aria-label="TODO — Início">
+        <span class="logo-acronym">TODO</span>
         <span class="logo-tagline">Plataforma Paranormal</span>
       </a>
 
       <ul class="nav-links" role="list">
-        <li><a href="#features-section">Recursos</a></li>
-        <li><a href="#agents-section">Agentes</a></li>
-        <li><a href="#master-section">Mestre</a></li>
-        <li><a href="#homebrew-section">Homebrew</a></li>
-        <li><a href="#support-section">Apoiar</a></li>
+        <li><a href="#agents" class="tab-link" data-target="agents">Agentes</a></li>
+        <li><a href="#campaigns" class="tab-link" data-target="campaigns">Campanhas</a></li>
+        <li><a href="#bestiary" class="tab-link" data-target="bestiary">Bestiário</a></li>
+        <li><a href="#homebrew" class="tab-link" data-target="homebrew">Homebrew</a></li>
       </ul>
 
       <div class="nav-actions">
-        <a href="#support-section" class="btn btn-ghost">Entrar</a>
-        <a href="#support-section" class="btn btn-primary">Criar Conta</a>
+        <a href="#login" class="btn btn-outline btn-sm tab-link"
+          style="padding: 0.35rem 1rem; border-radius: 9999px; font-size: 0.8rem;" data-target="login">Entrar</a>
       </div>
 
       <button id="nav-toggle" class="nav-toggle" aria-label="Abrir menu" aria-expanded="false">
@@ -54,12 +57,12 @@
     <!-- Mobile Menu -->
     <div id="mobile-menu" class="mobile-menu" aria-hidden="true">
       <ul role="list">
-        <li><a href="#features-section">Recursos</a></li>
-        <li><a href="#agents-section">Agentes</a></li>
-        <li><a href="#master-section">Mestre</a></li>
-        <li><a href="#homebrew-section">Homebrew</a></li>
-        <li><a href="#support-section">Apoiar</a></li>
-        <li><a href="#support-section" class="btn btn-primary w-full">Criar Conta</a></li>
+        <li><a href="#agents" class="tab-link" data-target="agents">Agentes</a></li>
+        <li><a href="#campaigns" class="tab-link" data-target="campaigns">Campanhas</a></li>
+        <li><a href="#bestiary" class="tab-link" data-target="bestiary">Bestiário</a></li>
+        <li><a href="#homebrew" class="tab-link" data-target="homebrew">Homebrew</a></li>
+        <li><a href="#login" class="tab-link" data-target="login" style="color: var(--color-red-light);">Entrar na
+            Plataforma</a></li>
       </ul>
     </div>
   </header>
@@ -67,319 +70,281 @@
   <main id="main-content">
 
     <!-- ============================================================
-         HERO SECTION
+         HOME WRAPPER (HERO + FEATURES + COMMUNITY)
     ============================================================ -->
-    <section id="hero-section" aria-labelledby="hero-heading">
-      <!-- Background particles canvas -->
-      <canvas id="particles-canvas" aria-hidden="true"></canvas>
+    <div id="home-wrapper" class="tab-section active-tab" data-tab="home">
 
-      <!-- Decorative sigil -->
-      <div class="hero-sigil" aria-hidden="true">
-        <svg viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="150" cy="150" r="140" stroke="currentColor" stroke-width="1" stroke-dasharray="4 6" opacity="0.4"/>
-          <circle cx="150" cy="150" r="100" stroke="currentColor" stroke-width="1" opacity="0.3"/>
-          <circle cx="150" cy="150" r="60" stroke="currentColor" stroke-width="1.5" opacity="0.5"/>
-          <polygon points="150,20 272,95 272,205 150,280 28,205 28,95" stroke="currentColor" stroke-width="1" fill="none" opacity="0.3"/>
-          <polygon points="150,50 245,108 245,192 150,250 55,192 55,108" stroke="currentColor" stroke-width="0.8" fill="none" opacity="0.25"/>
-          <line x1="150" y1="10" x2="150" y2="290" stroke="currentColor" stroke-width="0.5" opacity="0.2"/>
-          <line x1="10" y1="150" x2="290" y2="150" stroke="currentColor" stroke-width="0.5" opacity="0.2"/>
-          <line x1="47" y1="47" x2="253" y2="253" stroke="currentColor" stroke-width="0.5" opacity="0.2"/>
-          <line x1="253" y1="47" x2="47" y2="253" stroke="currentColor" stroke-width="0.5" opacity="0.2"/>
-          <circle cx="150" cy="150" r="8" fill="currentColor" opacity="0.7"/>
-          <circle cx="150" cy="150" r="4" fill="currentColor" opacity="1"/>
-        </svg>
-      </div>
+      <!-- ============================================================
+           HERO SECTION
+      ============================================================ -->
+      <section id="hero-section" aria-labelledby="hero-heading">
+        <!-- Background particles canvas -->
+        <canvas id="particles-canvas" aria-hidden="true"></canvas>
 
-      <div class="hero-content">
-        <div class="hero-badge">
-          <span class="badge-dot" aria-hidden="true"></span>
-          Sistema Paranormal v3.0 — Ativo
+        <!-- Decorative sigil -->
+        <div class="hero-sigil" aria-hidden="true">
+          <svg viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="150" cy="150" r="140" stroke="currentColor" stroke-width="1" stroke-dasharray="4 6"
+              opacity="0.4" />
+            <circle cx="150" cy="150" r="100" stroke="currentColor" stroke-width="1" opacity="0.3" />
+            <circle cx="150" cy="150" r="60" stroke="currentColor" stroke-width="1.5" opacity="0.5" />
+            <polygon points="150,20 272,95 272,205 150,280 28,205 28,95" stroke="currentColor" stroke-width="1"
+              fill="none" opacity="0.3" />
+            <polygon points="150,50 245,108 245,192 150,250 55,192 55,108" stroke="currentColor" stroke-width="0.8"
+              fill="none" opacity="0.25" />
+            <line x1="150" y1="10" x2="150" y2="290" stroke="currentColor" stroke-width="0.5" opacity="0.2" />
+            <line x1="10" y1="150" x2="290" y2="150" stroke="currentColor" stroke-width="0.5" opacity="0.2" />
+            <line x1="47" y1="47" x2="253" y2="253" stroke="currentColor" stroke-width="0.5" opacity="0.2" />
+            <line x1="253" y1="47" x2="47" y2="253" stroke="currentColor" stroke-width="0.5" opacity="0.2" />
+            <circle cx="150" cy="150" r="8" fill="currentColor" opacity="0.7" />
+            <circle cx="150" cy="150" r="4" fill="currentColor" opacity="1" />
+          </svg>
         </div>
 
-        <h1 id="hero-heading" class="hero-title">
-          <span class="title-line">Bem-vindo à</span>
-          <span class="title-acronym">
-            <span class="letter" data-letter="T">T</span><span class="dot">.</span><span class="letter" data-letter="O">O</span><span class="dot">.</span><span class="letter" data-letter="D">D</span><span class="dot">.</span><span class="letter" data-letter="O">O</span><span class="dot">.</span>
-          </span>
-          <span class="title-sub">Tecnologia Operacional de Dossiês Ocultos</span>
-        </h1>
+        <div class="hero-content">
+          <div class="hero-badge">
+            <span class="badge-dot" aria-hidden="true"></span>
+            Sistema Paranormal v3.0 — Ativo
+          </div>
 
-        <p class="hero-description">
-          A plataforma definitiva para agentes da Ordem. Fichas digitais inteligentes, rolagem automática,
-          gestão de campanhas e ferramentas exclusivas para mestres. Tudo em um único lugar — sombrio e seguro.
-        </p>
+          <h1 id="hero-heading" class="hero-title">
+            <span class="title-line">Bem-vindo à</span>
+            <span class="title-acronym">
+              <span class="letter" data-letter="T">T</span><span class="dot">.</span><span class="letter"
+                data-letter="O">O</span><span class="dot">.</span><span class="letter" data-letter="D">D</span><span
+                class="dot">.</span><span class="letter" data-letter="O">O</span><span class="dot">.</span>
+            </span>
 
-        <div class="hero-actions">
-          <a href="#features-section" class="btn btn-primary btn-large">
-            <i class="fas fa-eye" aria-hidden="true"></i>
-            Acessar o Sistema
-          </a>
-          <a href="#support-section" class="btn btn-outline btn-large">
-            <i class="fas fa-skull" aria-hidden="true"></i>
-            Torne-se Agente
-          </a>
+          </h1>
+
+          <p class="hero-description">
+            A plataforma definitiva para agentes da Ordem. Fichas digitais inteligentes, rolagem automática,
+            gestão de campanhas e ferramentas exclusivas para mestres. Tudo em um único lugar — sombrio e seguro.
+          </p>
+
+          <div class="hero-actions">
+            <a href="#features-section" class="btn btn-primary btn-large">
+              <i class="fas fa-eye" aria-hidden="true"></i>
+              Acessar o Sistema
+            </a>
+            <a href="#login" class="btn btn-outline btn-large tab-link" data-target="login">
+              <i class="fas fa-skull" aria-hidden="true"></i>
+              Torne-se Agente
+            </a>
+          </div>
+
+          <div class="hero-stats" role="list" aria-label="Estatísticas da plataforma">
+            <div class="stat-item" role="listitem">
+              <span class="stat-number" id="global-agent-count" data-target="0">0</span>
+              <span class="stat-label">Agentes Ativos</span>
+            </div>
+            <div class="stat-divider" aria-hidden="true"></div>
+            <div class="stat-item" role="listitem">
+              <span class="stat-number" id="global-campaign-count" data-target="0">0</span>
+              <span class="stat-label">Campanhas Criadas</span>
+            </div>
+            <div class="stat-divider" aria-hidden="true"></div>
+            <div class="stat-item" role="listitem">
+              <span class="stat-number" id="global-sessions-count" data-target="0">0</span>
+              <span class="stat-label">Sessões Hoje</span>
+            </div>
+          </div>
         </div>
 
-        <div class="hero-stats" role="list" aria-label="Estatísticas da plataforma">
-          <div class="stat-item" role="listitem">
-            <span class="stat-number" data-target="12847">0</span>
-            <span class="stat-label">Agentes Ativos</span>
-          </div>
-          <div class="stat-divider" aria-hidden="true"></div>
-          <div class="stat-item" role="listitem">
-            <span class="stat-number" data-target="3241">0</span>
-            <span class="stat-label">Campanhas Criadas</span>
-          </div>
-          <div class="stat-divider" aria-hidden="true"></div>
-          <div class="stat-item" role="listitem">
-            <span class="stat-number" data-target="98">0</span>
-            <span class="stat-label">Sessões Hoje</span>
-          </div>
+        <div class="hero-scroll-hint" aria-hidden="true">
+          <span>Desça para explorar</span>
+          <i class="fas fa-chevron-down"></i>
         </div>
-      </div>
+      </section>
 
-      <div class="hero-scroll-hint" aria-hidden="true">
-        <span>Desça para explorar</span>
-        <i class="fas fa-chevron-down"></i>
-      </div>
-    </section>
-
-    <!-- ============================================================
+      <!-- ============================================================
          FEATURES INTRO SECTION
     ============================================================ -->
-    <section id="features-section" class="section-dark" aria-labelledby="features-heading">
-      <div class="container">
-        <header class="section-header">
-          <div class="section-tag">
-            <i class="fas fa-file-alt" aria-hidden="true"></i>
-            Fichas Digitais
-          </div>
-          <h2 id="features-heading" class="section-title">
-            Seu dossiê sempre<br /><em>à mão e pronto</em>
-          </h2>
-          <p class="section-desc">
-            Acesso rápido e simplificado a todas as informações do seu agente. Faça a rolagem de perícias,
-            atributos e ataques com um único clique. Concentre-se menos na matemática e foque no que
-            realmente importa — sobreviver ao sobrenatural.
-          </p>
-        </header>
+      <section id="features-section" class="section-dark" aria-labelledby="features-heading">
+        <div class="container">
+          <header class="section-header">
+            <div class="section-tag">
+              <i class="fas fa-file-alt" aria-hidden="true"></i>
+              Fichas Digitais
+            </div>
+            <h2 id="features-heading" class="section-title">
+              Seu dossiê sempre<br /><em>à mão e pronto</em>
+            </h2>
+            <p class="section-desc">
+              Acesso rápido e simplificado a todas as informações do seu agente. Faça a rolagem de perícias,
+              atributos e ataques com um único clique. Concentre-se menos na matemática e foque no que
+              realmente importa — sobreviver ao sobrenatural.
+            </p>
+          </header>
 
-        <div class="features-showcase">
-          <div class="features-mockup" aria-hidden="true">
-            <div class="mockup-window">
-              <div class="mockup-bar">
-                <span class="dot red"></span>
-                <span class="dot yellow"></span>
-                <span class="dot green"></span>
-                <span class="mockup-title">T.O.D.O. — Ficha do Agente</span>
-              </div>
-              <div class="mockup-body">
-                <div class="mockup-agent-header">
-                  <div class="agent-avatar">
-                    <i class="fas fa-user-secret"></i>
-                  </div>
-                  <div class="agent-info">
-                    <h3>Agente #0017</h3>
-                    <p>Ocultista · NEX 40%</p>
-                    <div class="nex-bar">
-                      <div class="nex-fill" style="width: 40%"></div>
+          <div class="features-showcase">
+            <div class="features-mockup" aria-hidden="true">
+              <div class="mockup-window">
+                <div class="mockup-bar">
+                  <span class="dot red"></span>
+                  <span class="dot yellow"></span>
+                  <span class="dot green"></span>
+                  <span class="mockup-title">TODO — Ficha do Agente</span>
+                </div>
+                <div class="mockup-body">
+                  <div class="mockup-agent-header">
+                    <div class="agent-avatar">
+                      <i class="fas fa-user-secret"></i>
+                    </div>
+                    <div class="agent-info">
+                      <h3>Agente #0017</h3>
+                      <p>Ocultista · NEX 40%</p>
+                      <div class="nex-bar">
+                        <div class="nex-fill" style="width: 40%"></div>
+                      </div>
+                    </div>
+                    <div class="agent-hp">
+                      <span class="hp-label">PV</span>
+                      <span class="hp-value">18<small>/24</small></span>
                     </div>
                   </div>
-                  <div class="agent-hp">
-                    <span class="hp-label">PV</span>
-                    <span class="hp-value">18<small>/24</small></span>
-                  </div>
-                </div>
 
-                <div class="mockup-attributes">
-                  <div class="attr-row">
-                    <span class="attr-name">FOR</span>
-                    <div class="attr-bar"><div style="width:50%"></div></div>
-                    <span class="attr-val">10</span>
-                    <button class="roll-btn"><i class="fas fa-dice-d20"></i></button>
+                  <div class="mockup-attributes">
+                    <div class="attr-row">
+                      <span class="attr-name">FOR</span>
+                      <div class="attr-bar">
+                        <div style="width:50%"></div>
+                      </div>
+                      <span class="attr-val">10</span>
+                      <button class="roll-btn"><i class="fas fa-dice-d20"></i></button>
+                    </div>
+                    <div class="attr-row">
+                      <span class="attr-name">AGI</span>
+                      <div class="attr-bar">
+                        <div style="width:75%"></div>
+                      </div>
+                      <span class="attr-val">15</span>
+                      <button class="roll-btn"><i class="fas fa-dice-d20"></i></button>
+                    </div>
+                    <div class="attr-row">
+                      <span class="attr-name">INT</span>
+                      <div class="attr-bar">
+                        <div style="width:85%"></div>
+                      </div>
+                      <span class="attr-val">17</span>
+                      <button class="roll-btn active"><i class="fas fa-dice-d20"></i></button>
+                    </div>
+                    <div class="attr-row">
+                      <span class="attr-name">PRE</span>
+                      <div class="attr-bar">
+                        <div style="width:65%"></div>
+                      </div>
+                      <span class="attr-val">13</span>
+                      <button class="roll-btn"><i class="fas fa-dice-d20"></i></button>
+                    </div>
+                    <div class="attr-row">
+                      <span class="attr-name">VIG</span>
+                      <div class="attr-bar">
+                        <div style="width:40%"></div>
+                      </div>
+                      <span class="attr-val">8</span>
+                      <button class="roll-btn"><i class="fas fa-dice-d20"></i></button>
+                    </div>
                   </div>
-                  <div class="attr-row">
-                    <span class="attr-name">AGI</span>
-                    <div class="attr-bar"><div style="width:75%"></div></div>
-                    <span class="attr-val">15</span>
-                    <button class="roll-btn"><i class="fas fa-dice-d20"></i></button>
-                  </div>
-                  <div class="attr-row">
-                    <span class="attr-name">INT</span>
-                    <div class="attr-bar"><div style="width:85%"></div></div>
-                    <span class="attr-val">17</span>
-                    <button class="roll-btn active"><i class="fas fa-dice-d20"></i></button>
-                  </div>
-                  <div class="attr-row">
-                    <span class="attr-name">PRE</span>
-                    <div class="attr-bar"><div style="width:65%"></div></div>
-                    <span class="attr-val">13</span>
-                    <button class="roll-btn"><i class="fas fa-dice-d20"></i></button>
-                  </div>
-                  <div class="attr-row">
-                    <span class="attr-name">VIG</span>
-                    <div class="attr-bar"><div style="width:40%"></div></div>
-                    <span class="attr-val">8</span>
-                    <button class="roll-btn"><i class="fas fa-dice-d20"></i></button>
-                  </div>
-                </div>
 
-                <div class="mockup-roll-result">
-                  <span class="roll-label">Último resultado</span>
-                  <span class="roll-value">🎲 17 + 3 = <strong>20</strong></span>
-                  <span class="roll-status success">Sucesso Crítico!</span>
+                  <div class="mockup-roll-result">
+                    <span class="roll-label">Último resultado</span>
+                    <span class="roll-value">🎲 17 + 3 = <strong>20</strong></span>
+                    <span class="roll-status success">Sucesso Crítico!</span>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          <ul class="features-list" role="list">
-            <li class="feature-item">
-              <div class="feature-icon">
-                <i class="fas fa-dice-d20"></i>
-              </div>
-              <div class="feature-text">
-                <h3>Rolagem Automática</h3>
-                <p>Clique e role qualquer teste com cálculo automático de bônus, penalidades e graus de sucesso.</p>
-              </div>
-            </li>
-            <li class="feature-item">
-              <div class="feature-icon">
-                <i class="fas fa-brain"></i>
-              </div>
-              <div class="feature-text">
-                <h3>Sanidade em Tempo Real</h3>
-                <p>Monitore sua sanidade, traumas e condições psíquicas com alertas visuais dinâmicos.</p>
-              </div>
-            </li>
-            <li class="feature-item">
-              <div class="feature-icon">
-                <i class="fas fa-shield-alt"></i>
-              </div>
-              <div class="feature-text">
-                <h3>Rituais e Poderes</h3>
-                <p>Acesse sua lista completa de rituais, poderes paranormais e custos de esforço instantaneamente.</p>
-              </div>
-            </li>
-            <li class="feature-item">
-              <div class="feature-icon">
-                <i class="fas fa-sync-alt"></i>
-              </div>
-              <div class="feature-text">
-                <h3>Sincronização em Nuvem</h3>
-                <p>Sua ficha sempre atualizada em todos os dispositivos. Nunca mais perca o progresso do seu agente.</p>
-              </div>
-            </li>
-          </ul>
+            <ul class="features-list" role="list">
+              <li class="feature-item">
+                <div class="feature-icon">
+                  <i class="fas fa-dice-d20"></i>
+                </div>
+                <div class="feature-text">
+                  <h3>Rolagem Automática</h3>
+                  <p>Clique e role qualquer teste com cálculo automático de bônus, penalidades e graus de sucesso.</p>
+                </div>
+              </li>
+              <li class="feature-item">
+                <div class="feature-icon">
+                  <i class="fas fa-brain"></i>
+                </div>
+                <div class="feature-text">
+                  <h3>Sanidade em Tempo Real</h3>
+                  <p>Monitore sua sanidade, traumas e condições psíquicas com alertas visuais dinâmicos.</p>
+                </div>
+              </li>
+              <li class="feature-item">
+                <div class="feature-icon">
+                  <i class="fas fa-shield-alt"></i>
+                </div>
+                <div class="feature-text">
+                  <h3>Rituais e Poderes</h3>
+                  <p>Acesse sua lista completa de rituais, poderes paranormais e custos de esforço instantaneamente.</p>
+                </div>
+              </li>
+              <li class="feature-item">
+                <div class="feature-icon">
+                  <i class="fas fa-sync-alt"></i>
+                </div>
+                <div class="feature-text">
+                  <h3>Sincronização em Nuvem</h3>
+                  <p>Sua ficha sempre atualizada em todos os dispositivos. Nunca mais perca o progresso do seu agente.
+                  </p>
+                </div>
+              </li>
+            </ul>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+    </div> <!-- END HOME WRAPPER -->
 
     <!-- ============================================================
          AGENTS SECTION
     ============================================================ -->
-    <section id="agents-section" class="section-darker" aria-labelledby="agents-heading">
+    <section id="agents-section" class="section-darker tab-section" data-tab="agents" aria-labelledby="agents-heading">
       <div class="container">
-        <div class="split-layout reverse">
-          <div class="split-content">
-            <div class="section-tag">
-              <i class="fas fa-users" aria-hidden="true"></i>
-              Seus Agentes
+        <div class="dashboard-wrapper">
+          <header class="dashboard-header">
+            <h3 id="agente-counter">Agentes: 0/30</h3>
+            <button class="btn btn-primary" id="btn-top-create-agent">Novo Agente</button>
+          </header>
+
+          <div class="agent-dashboard-grid" id="agents-grid-container">
+
+            <!-- Botão Gigante de Adicionar Novo Agente (Empty State) -->
+            <div id="agent-empty-state" class="agent-dash-card empty-state"
+              style="align-items: center; justify-content: center; text-align: center; border-style: dashed; padding: 3rem 1.5rem; cursor: pointer;">
+              <i class="fas fa-plus-circle"
+                style="font-size: 2.5rem; color: var(--color-red-dark); margin-bottom: 0.5rem;"></i>
+              <h4 style="color: var(--color-text); margin-bottom: 0.25rem;">Nenhum Agente</h4>
+              <p style="color: var(--color-text-3); font-size: 0.85rem; margin-bottom: 1.25rem;">Crie seu primeiro
+                agente da ordem.</p>
+              <button class="btn btn-primary" id="btn-center-create-agent">
+                Novo Agente
+              </button>
             </div>
-            <h2 id="agents-heading" class="section-title">
-              Todos os seus agentes<br /><em>em um só lugar</em>
-            </h2>
-            <p class="section-desc">
-              Liberte-se do medo de perder suas fichas! Tenha todos os seus agentes sempre prontos
-              para a próxima missão. Crie campanhas em segundos, adicione membros ao grupo e acesse
-              resultados de dados e ferramentas exclusivas de qualquer dispositivo.
-            </p>
 
-            <ul class="check-list" role="list">
-              <li><i class="fas fa-check" aria-hidden="true"></i> Múltiplos agentes por conta</li>
-              <li><i class="fas fa-check" aria-hidden="true"></i> Histórico completo de missões</li>
-              <li><i class="fas fa-check" aria-hidden="true"></i> Compartilhamento fácil com o Mestre</li>
-              <li><i class="fas fa-check" aria-hidden="true"></i> Exportação de ficha em PDF</li>
-              <li><i class="fas fa-check" aria-hidden="true"></i> Retratos e tokens personalizados</li>
-            </ul>
-
-            <a href="#support-section" class="btn btn-primary">
-              <i class="fas fa-plus-circle" aria-hidden="true"></i>
-              Criar seu primeiro Agente
-            </a>
-          </div>
-
-          <div class="split-visual">
-            <div class="agents-grid" aria-label="Exemplos de agentes">
-              <div class="agent-card featured">
-                <div class="agent-card-icon">
-                  <i class="fas fa-user-secret"></i>
-                </div>
-                <div class="agent-card-body">
-                  <h4>Valentina Cruz</h4>
-                  <span class="agent-class">Ocultista</span>
-                  <div class="agent-nex">NEX <strong>55%</strong></div>
-                </div>
-                <div class="agent-status online">
-                  <span></span> Online
-                </div>
-              </div>
-
-              <div class="agent-card">
-                <div class="agent-card-icon">
-                  <i class="fas fa-fist-raised"></i>
-                </div>
-                <div class="agent-card-body">
-                  <h4>Ricardo Mota</h4>
-                  <span class="agent-class">Combatente</span>
-                  <div class="agent-nex">NEX <strong>30%</strong></div>
-                </div>
-                <div class="agent-status offline">
-                  <span></span> Offline
-                </div>
-              </div>
-
-              <div class="agent-card">
-                <div class="agent-card-icon">
-                  <i class="fas fa-medkit"></i>
-                </div>
-                <div class="agent-card-body">
-                  <h4>Dr. Sá Neto</h4>
-                  <span class="agent-class">Especialista</span>
-                  <div class="agent-nex">NEX <strong>40%</strong></div>
-                </div>
-                <div class="agent-status online">
-                  <span></span> Online
-                </div>
-              </div>
-
-              <div class="agent-card new-agent">
-                <div class="agent-card-icon">
-                  <i class="fas fa-plus"></i>
-                </div>
-                <div class="agent-card-body">
-                  <h4>Novo Agente</h4>
-                  <span class="agent-class">Criar ficha</span>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>
     </section>
 
     <!-- ============================================================
-         MASTER TOOLS SECTION
+         BESTIARY TOOLS SECTION
     ============================================================ -->
-    <section id="master-section" class="section-dark" aria-labelledby="master-heading">
+    <section id="bestiary-section" class="section-dark tab-section" data-tab="bestiary"
+      aria-labelledby="bestiary-heading">
       <div class="container">
         <header class="section-header">
           <div class="section-tag">
-            <i class="fas fa-dungeon" aria-hidden="true"></i>
-            Ferramentas para o Mestre
+            <i class="fas fa-book-dead" aria-hidden="true"></i>
+            Bestiário
           </div>
-          <h2 id="master-heading" class="section-title">
-            O Escudo do Mestre<br /><em>reinventado</em>
+          <h2 id="bestiary-heading" class="section-title">
+            Ferramentas definitivas<br /><em>para o Mestre</em>
           </h2>
           <p class="section-desc">
             Tudo o que você precisa para conduzir sessões épicas e assustadoras, reunido em uma interface
@@ -406,7 +371,8 @@
               </div>
               <h3>Mesa de Rolagem</h3>
             </div>
-            <p>Realize rolagens secretas, testes automáticos e compartilhe resultados em tempo real com os jogadores.</p>
+            <p>Realize rolagens secretas, testes automáticos e compartilhe resultados em tempo real com os jogadores.
+            </p>
             <div class="tool-badge">Popular</div>
           </article>
 
@@ -457,7 +423,8 @@
     <!-- ============================================================
          HOMEBREW SECTION
     ============================================================ -->
-    <section id="homebrew-section" class="section-darker" aria-labelledby="homebrew-heading">
+    <section id="homebrew-section" class="section-darker tab-section" data-tab="homebrew"
+      aria-labelledby="homebrew-heading">
       <div class="container">
         <div class="split-layout">
           <div class="split-content">
@@ -469,7 +436,7 @@
               Crie seu próprio<br /><em>universo oculto</em>
             </h2>
             <p class="section-desc">
-              Com o sistema de Homebrew do T.O.D.O., você pode criar itens, rituais, criaturas e até
+              Com o sistema de Homebrew do TODO, você pode criar itens, rituais, criaturas e até
               classes inteiramente novas. Compartilhe com a comunidade ou mantenha seus segredos.
             </p>
 
@@ -503,7 +470,8 @@
                   </div>
                   <span class="hb-badge">Homebrew</span>
                 </div>
-                <p>Permite ao agente se comunicar brevemente com um espírito ligado a um local ou objeto. Custo: 2 PE + 1 ponto de sanidade.</p>
+                <p>Permite ao agente se comunicar brevemente com um espírito ligado a um local ou objeto. Custo: 2 PE +
+                  1 ponto de sanidade.</p>
                 <div class="hb-meta">
                   <span><i class="fas fa-heart"></i> 247 curtidas</span>
                   <span><i class="fas fa-download"></i> 1.2k usos</span>
@@ -520,7 +488,8 @@
                   </div>
                   <span class="hb-badge">Homebrew</span>
                 </div>
-                <p>Uma cópia especular de um humano corrompida pelo Outro Lado. Age como o original, mas com intenções sinistras e poderes sobrenaturais.</p>
+                <p>Uma cópia especular de um humano corrompida pelo Outro Lado. Age como o original, mas com intenções
+                  sinistras e poderes sobrenaturais.</p>
                 <div class="hb-meta">
                   <span><i class="fas fa-heart"></i> 189 curtidas</span>
                   <span><i class="fas fa-download"></i> 856 usos</span>
@@ -541,75 +510,29 @@
     <!-- ============================================================
          CAMPAIGN SECTION
     ============================================================ -->
-    <section id="campaign-section" class="section-campaign" aria-labelledby="campaign-heading">
+    <section id="campaign-section" class="section-campaign tab-section" data-tab="campaigns"
+      aria-labelledby="campaign-heading">
       <div class="campaign-bg-grid" aria-hidden="true"></div>
       <div class="container">
-        <header class="section-header">
-          <div class="section-tag">
-            <i class="fas fa-book-open" aria-hidden="true"></i>
-            Campanhas
-          </div>
-          <h2 id="campaign-heading" class="section-title">
-            Gerencie suas<br /><em>investigações</em>
-          </h2>
-        </header>
+        <div class="dashboard-wrapper">
+          <header class="dashboard-header">
+            <h3 id="campaign-counter">Campanhas: 0/10</h3>
+            <button class="btn btn-primary" id="btn-top-create-campaign">Nova Campanha</button>
+          </header>
 
-        <div class="campaign-features">
-          <div class="campaign-main">
-            <div class="campaign-card-big">
-              <div class="cc-header">
-                <i class="fas fa-biohazard"></i>
-                <div>
-                  <h3>Operação: Véu Vermelho</h3>
-                  <small>Campanha em andamento · 12 sessões</small>
-                </div>
-                <span class="cc-status active">Ativa</span>
-              </div>
-              <div class="cc-agents">
-                <span class="cc-label">Agentes na missão:</span>
-                <div class="cc-avatars">
-                  <div class="cc-avatar"><i class="fas fa-user-secret"></i></div>
-                  <div class="cc-avatar"><i class="fas fa-fist-raised"></i></div>
-                  <div class="cc-avatar"><i class="fas fa-medkit"></i></div>
-                  <div class="cc-avatar"><i class="fas fa-ghost"></i></div>
-                </div>
-                <span class="cc-count">+2 agentes</span>
-              </div>
-              <div class="cc-progress">
-                <div class="cc-prog-bar">
-                  <div style="width: 65%"></div>
-                </div>
-                <span>Progresso da Campanha: 65%</span>
-              </div>
+          <div class="agent-dashboard-grid" id="campaigns-grid-container">
+            <!-- Empty State de Campanhas -->
+            <div id="campaign-empty-state" class="agent-dash-card empty-state"
+              style="align-items: center; justify-content: center; text-align: center; border-style: dashed; padding: 3rem 1.5rem; cursor: pointer;">
+              <i class="fas fa-book-open"
+                style="font-size: 2.5rem; color: var(--color-red-dark); margin-bottom: 0.5rem;"></i>
+              <h4 style="color: var(--color-text); margin-bottom: 0.25rem;">Nenhuma Campanha</h4>
+              <p style="color: var(--color-text-3); font-size: 0.85rem; margin-bottom: 1.25rem;">Inicie sua primeira
+                investigação mestre.</p>
+              <button class="btn btn-primary" id="btn-center-create-campaign">
+                Nova Campanha
+              </button>
             </div>
-          </div>
-
-          <div class="campaign-side">
-            <div class="cc-mini">
-              <i class="fas fa-eye-slash"></i>
-              <div>
-                <strong>A Última Testemunha</strong>
-                <small>3 sessões · Pausada</small>
-              </div>
-            </div>
-            <div class="cc-mini">
-              <i class="fas fa-spider"></i>
-              <div>
-                <strong>Teia Negra</strong>
-                <small>7 sessões · Concluída</small>
-              </div>
-            </div>
-            <div class="cc-mini">
-              <i class="fas fa-radiation"></i>
-              <div>
-                <strong>Projeto Lazarus</strong>
-                <small>1 sessão · Nova</small>
-              </div>
-            </div>
-            <button class="cc-new-btn">
-              <i class="fas fa-plus"></i>
-              Nova Campanha
-            </button>
           </div>
         </div>
       </div>
@@ -618,137 +541,122 @@
     <!-- ============================================================
          TESTIMONIALS / COMMUNITY SECTION
     ============================================================ -->
-    <section id="community-section" class="section-darker" aria-labelledby="community-heading">
-      <div class="container">
-        <header class="section-header">
-          <div class="section-tag">
-            <i class="fas fa-comment-dots" aria-hidden="true"></i>
-            Comunidade
+    <!-- Re-abrindo container caso queira que a comunidade fique salva na Home -->
+    <div class="tab-section active-tab" data-tab="home" id="community-home-wrapper">
+      <section id="community-section" class="section-darker" aria-labelledby="community-heading">
+        <div class="container">
+          <header class="section-header">
+            <div class="section-tag">
+              <i class="fas fa-comment-dots" aria-hidden="true"></i>
+              Comunidade
+            </div>
+            <h2 id="community-heading" class="section-title">
+              O que os agentes<br /><em>estão dizendo</em>
+            </h2>
+          </header>
+
+          <div class="testimonials-grid" role="list">
+            <blockquote class="testimonial-card" role="listitem">
+              <div class="quote-icon" aria-hidden="true"><i class="fas fa-quote-left"></i></div>
+              <p>"O TODO transformou completamente as minhas sessões. A rolagem automática economiza tanto tempo que
+                sobramos para o roleplay puro. Incrível!"</p>
+              <footer class="testimonial-author">
+                <div class="author-avatar"><i class="fas fa-user"></i></div>
+                <div>
+                  <strong>@cavaleiro_das_sombras</strong>
+                  <span>Mestre de Ordem há 3 anos</span>
+                </div>
+              </footer>
+            </blockquote>
+
+            <blockquote class="testimonial-card featured" role="listitem">
+              <div class="quote-icon" aria-hidden="true"><i class="fas fa-quote-left"></i></div>
+              <p>"Finalmente uma plataforma que entende o RPG de horror. As ferramentas de sanidade e trauma são
+                perfeitas
+                para criar aquele clima de tensão que a Ordem merece. Nossa mesa nunca foi tão imersiva."</p>
+              <footer class="testimonial-author">
+                <div class="author-avatar"><i class="fas fa-user"></i></div>
+                <div>
+                  <strong>@a_detetive_sobrenatural</strong>
+                  <span>Jogadora desde o início</span>
+                </div>
+              </footer>
+            </blockquote>
+
+            <blockquote class="testimonial-card" role="listitem">
+              <div class="quote-icon" aria-hidden="true"><i class="fas fa-quote-left"></i></div>
+              <p>"O sistema de Homebrew é revolucionário. Já criei mais de 20 rituais personalizados e compartilhei com
+                a
+                comunidade. É incrível ver outros mestres usando nas campanhas deles!"</p>
+              <footer class="testimonial-author">
+                <div class="author-avatar"><i class="fas fa-user"></i></div>
+                <div>
+                  <strong>@grimoire_digital</strong>
+                  <span>Criador de conteúdo homebrew</span>
+                </div>
+              </footer>
+            </blockquote>
           </div>
-          <h2 id="community-heading" class="section-title">
-            O que os agentes<br /><em>estão dizendo</em>
-          </h2>
-        </header>
 
-        <div class="testimonials-grid" role="list">
-          <blockquote class="testimonial-card" role="listitem">
-            <div class="quote-icon" aria-hidden="true"><i class="fas fa-quote-left"></i></div>
-            <p>"O T.O.D.O. transformou completamente as minhas sessões. A rolagem automática economiza tanto tempo que sobramos para o roleplay puro. Incrível!"</p>
-            <footer class="testimonial-author">
-              <div class="author-avatar"><i class="fas fa-user"></i></div>
-              <div>
-                <strong>@cavaleiro_das_sombras</strong>
-                <span>Mestre de Ordem há 3 anos</span>
-              </div>
-            </footer>
-          </blockquote>
+          <!-- Módulo de Fórum/Chat da Comunidade -->
+          <div class="community-forum-wrapper"
+            style="margin-top: 4rem; padding-top: 3rem; border-top: 1px solid var(--color-border);">
+            <header class="dashboard-header" style="margin-bottom: 2rem;">
+              <h3 style="font-size: 1.25rem;">Transmissão Aberta</h3>
+              <span style="color: var(--color-text-3); font-size: 0.85rem;">Compartilhe suas ideias com a ordem</span>
+            </header>
 
-          <blockquote class="testimonial-card featured" role="listitem">
-            <div class="quote-icon" aria-hidden="true"><i class="fas fa-quote-left"></i></div>
-            <p>"Finalmente uma plataforma que entende o RPG de horror. As ferramentas de sanidade e trauma são perfeitas para criar aquele clima de tensão que a Ordem merece. Nossa mesa nunca foi tão imersiva."</p>
-            <footer class="testimonial-author">
-              <div class="author-avatar"><i class="fas fa-user"></i></div>
-              <div>
-                <strong>@a_detetive_sobrenatural</strong>
-                <span>Jogadora desde o início</span>
+            <div class="forum-post-box"
+              style="background: var(--color-bg-3); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 1.25rem; display: flex; flex-direction: column; gap: 1rem; margin-bottom: 2rem;">
+              <textarea id="forum-input" placeholder="O que você descobriu na sua última missão?"
+                style="width: 100%; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-sm); color: var(--color-text); padding: 1rem; min-height: 80px; resize: vertical; font-family: var(--font-body);"></textarea>
+              <div style="display: flex; justify-content: flex-end;">
+                <button class="btn btn-primary" id="btn-post-forum">Publicar</button>
               </div>
-            </footer>
-          </blockquote>
+            </div>
 
-          <blockquote class="testimonial-card" role="listitem">
-            <div class="quote-icon" aria-hidden="true"><i class="fas fa-quote-left"></i></div>
-            <p>"O sistema de Homebrew é revolucionário. Já criei mais de 20 rituais personalizados e compartilhei com a comunidade. É incrível ver outros mestres usando nas campanhas deles!"</p>
-            <footer class="testimonial-author">
-              <div class="author-avatar"><i class="fas fa-user"></i></div>
-              <div>
-                <strong>@grimoire_digital</strong>
-                <span>Criador de conteúdo homebrew</span>
-              </div>
-            </footer>
-          </blockquote>
+            <div class="forum-feed" id="forum-feed-container" style="display: flex; flex-direction: column; gap: 1rem;">
+              <!-- Mensagens serão geradas via JS -->
+            </div>
+          </div>
+
         </div>
-      </div>
-    </section>
+      </section>
+    </div> <!-- END COMMUNITY HOME WRAPPER -->
 
     <!-- ============================================================
-         SUPPORT / CTA SECTION
+         LOGIN SECTION
     ============================================================ -->
-    <section id="support-section" class="section-cta" aria-labelledby="support-heading">
-      <div class="cta-bg-glow" aria-hidden="true"></div>
-      <div class="container">
-        <div class="cta-inner">
-          <div class="cta-sigil" aria-hidden="true">
-            <svg viewBox="0 0 200 200" fill="none">
-              <circle cx="100" cy="100" r="90" stroke="currentColor" stroke-width="1" stroke-dasharray="3 5" opacity="0.5"/>
-              <circle cx="100" cy="100" r="60" stroke="currentColor" stroke-width="1" opacity="0.4"/>
-              <polygon points="100,15 177,60 177,140 100,185 23,140 23,60" stroke="currentColor" stroke-width="1" fill="none" opacity="0.4"/>
-              <circle cx="100" cy="100" r="12" stroke="currentColor" stroke-width="2" opacity="0.8"/>
-              <circle cx="100" cy="100" r="5" fill="currentColor"/>
-            </svg>
-          </div>
-
-          <div class="section-tag centered">
-            <i class="fas fa-star" aria-hidden="true"></i>
-            Torne-se um Agente da Ordem
-          </div>
-
-          <h2 id="support-heading" class="cta-title">
-            Junte-se ao<br /><em>T.O.D.O.</em> agora
-          </h2>
-
-          <p class="cta-desc">
-            Já imaginou ter acesso exclusivo e antecipado a todas as novidades da nossa plataforma?
-            Apoie o T.O.D.O. e obtenha benefícios especiais, recursos premium e acesso à área restrita
-            de agentes de alto nível.
-          </p>
-
-          <div class="pricing-cards" role="list">
-            <div class="pricing-card" role="listitem">
-              <div class="pricing-tier">Agente</div>
-              <div class="pricing-price">Grátis</div>
-              <ul class="pricing-features" role="list">
-                <li><i class="fas fa-check"></i> Até 3 fichas de agente</li>
-                <li><i class="fas fa-check"></i> 1 campanha ativa</li>
-                <li><i class="fas fa-check"></i> Rolagem básica</li>
-                <li><i class="fas fa-check"></i> Acesso ao homebrew público</li>
-              </ul>
-              <a href="#" class="btn btn-outline">Começar Grátis</a>
-            </div>
-
-            <div class="pricing-card highlight" role="listitem">
-              <div class="pricing-badge">Mais Popular</div>
-              <div class="pricing-tier">Agente Veterano</div>
-              <div class="pricing-price">R$ 9<span>/mês</span></div>
-              <ul class="pricing-features" role="list">
-                <li><i class="fas fa-check"></i> Fichas ilimitadas</li>
-                <li><i class="fas fa-check"></i> Campanhas ilimitadas</li>
-                <li><i class="fas fa-check"></i> Todas as ferramentas</li>
-                <li><i class="fas fa-check"></i> Homebrew avançado</li>
-                <li><i class="fas fa-check"></i> Suporte prioritário</li>
-              </ul>
-              <a href="#" class="btn btn-primary">Assinar Agora</a>
-            </div>
-
-            <div class="pricing-card" role="listitem">
-              <div class="pricing-tier">Mestre Supremo</div>
-              <div class="pricing-price">R$ 19<span>/mês</span></div>
-              <ul class="pricing-features" role="list">
-                <li><i class="fas fa-check"></i> Tudo do Veterano</li>
-                <li><i class="fas fa-check"></i> API para integrações</li>
-                <li><i class="fas fa-check"></i> Badge exclusivo</li>
-                <li><i class="fas fa-check"></i> Acesso beta de novidades</li>
-                <li><i class="fas fa-check"></i> Canal exclusivo no Discord</li>
-              </ul>
-              <a href="#" class="btn btn-outline">Tornar-se Mestre</a>
-            </div>
-          </div>
-
-          <p class="cta-catarse">
-            <i class="fas fa-heart"></i>
-            Prefere apoiar diretamente? Visite nosso
-            <a href="#">Catarse</a> e faça parte da fundação do T.O.D.O.
-          </p>
+    <section id="login-section" class="section-darker tab-section" data-tab="login" aria-labelledby="login-heading"
+      style="min-height: 100vh; display: none; align-items: center; justify-content: center;">
+      <div class="container" style="max-width: 450px; margin: 0 auto; padding: 4rem 1rem;">
+        <div style="text-align: center; margin-bottom: 2rem;">
+          <h2 id="login-heading" class="section-title"
+            style="margin-bottom: 0.5rem; color: var(--color-red-light); text-shadow: 0 0 20px var(--color-red-glow);">
+            Acesso Restrito</h2>
+          <p class="section-desc">Insira suas credenciais da Ordem.</p>
         </div>
+        <form id="login-form"
+          style="background: var(--color-bg-3); padding: 2rem; border-radius: var(--radius-lg); border: 1px solid var(--color-border); box-shadow: 0 25px 80px rgba(0,0,0,0.5), 0 0 40px rgba(196,30,58,0.05);">
+          <div style="margin-bottom: 1.5rem;">
+            <label
+              style="display: block; font-family: var(--font-mono); font-size: 0.8rem; color: var(--color-text-2); margin-bottom: 0.5rem; letter-spacing: 0.05em;">ID
+              DE AGENTE</label>
+            <input type="email" placeholder="agente@ordem.com"
+              style="width: 100%; padding: 0.8rem 1rem; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-sm); color: var(--color-text); outline: none;">
+          </div>
+          <div style="margin-bottom: 2rem;">
+            <label
+              style="display: block; font-family: var(--font-mono); font-size: 0.8rem; color: var(--color-text-2); margin-bottom: 0.5rem; letter-spacing: 0.05em;">CÓDIGO
+              DE ACESSO</label>
+            <input type="password" placeholder="••••••••"
+              style="width: 100%; padding: 0.8rem 1rem; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-sm); color: var(--color-text); outline: none;">
+          </div>
+          <button type="button" class="btn btn-primary" style="width: 100%; justify-content: center;"
+            onclick="alert('Sistema de login será implementado na base de dados oficial. Por enquanto você já possui acesso total!'); document.querySelector('a[data-target=\\'home\\']').click();">
+            Iniciar Sessão Local
+          </button>
+        </form>
       </div>
     </section>
 
@@ -761,8 +669,8 @@
     <div class="container">
       <div class="footer-grid">
         <div class="footer-brand">
-          <div class="footer-logo">T.O.D.O.</div>
-          <p>Tecnologia Operacional de Dossiês Ocultos. A plataforma definitiva para agentes da Ordem Paranormal.</p>
+          <div class="footer-logo">TODO</div>
+          <p>A plataforma definitiva para agentes da Ordem Paranormal.</p>
           <div class="footer-social" aria-label="Redes sociais">
             <a href="#" aria-label="Twitter / X"><i class="fab fa-x-twitter"></i></a>
             <a href="#" aria-label="Discord"><i class="fab fa-discord"></i></a>
@@ -806,9 +714,9 @@
       </div>
 
       <div class="footer-bottom">
-        <p>© 2024 T.O.D.O. — Tecnologia Operacional de Dossiês Ocultos. Todos os direitos reservados.</p>
-        <p class="footer-disclaimer">
-          T.O.D.O. é um projeto de fã independente, não afiliado oficialmente com Ordem Paranormal ou Cellbit.
+        <p>© 2024 TODO. Todos os direitos reservados.</p>
+        <p class="disclaimer">
+          TODO é um projeto de fã independente, não afiliado oficialmente com Ordem Paranormal ou Cellbit.
         </p>
       </div>
     </div>
@@ -817,4 +725,5 @@
   <!-- JavaScript -->
   <script src="js/main.js"></script>
 </body>
+
 </html>
