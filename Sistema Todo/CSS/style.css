@@ -2271,3 +2271,21 @@ button {
   outline-offset: 3px;
   border-radius: 4px;
 }
+
+/* =========================================================================
+   SPA TAB SYSTEM VISIBILITY
+========================================================================= */
+.tab-section {
+  display: none !important;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.tab-section.active-tab {
+  display: block !important;
+  opacity: 1;
+}
+
+#login-section.active-tab {
+  display: flex !important; /* Login uses a centered flex layout explicitly */
+}

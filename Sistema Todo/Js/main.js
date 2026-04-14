@@ -742,9 +742,61 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // --- LOGIN ENGINE ---
+  const btnGoogleLogin = document.getElementById('btn-google-login');
+  const step1 = document.getElementById('login-step-1');
+  const step2 = document.getElementById('login-step-2');
+  const btnFinishLogin = document.getElementById('btn-finish-login');
+  const nameInput = document.getElementById('new-agent-name-input');
+  
+  // Capturando links que disparam a ida para login
+  const navLoginBtns = document.querySelectorAll('a[data-target="login"]');
+  
+  function checkLoginState() {
+    let savedName = localStorage.getItem('todo_user_name');
+    if (savedName) {
+      if(navLoginBtns.length > 0) {
+        navLoginBtns.forEach(btn => {
+          btn.innerText = savedName;
+        });
+      }
+    }
+  }
+
+  if (btnGoogleLogin) {
+    btnGoogleLogin.addEventListener('click', () => {
+      let savedName = localStorage.getItem('todo_user_name');
+      if (savedName) {
+        // Já tem conta registrada -> Logo Instantâneo
+        document.querySelector('a[data-target="home"]').click(); 
+      } else {
+        // Primeiro acesso simulado com o Google -> pede nome
+        step1.style.display = 'none';
+        step2.style.display = 'block';
+      }
+    });
+  }
+
+  if (btnFinishLogin && nameInput) {
+    btnFinishLogin.addEventListener('click', () => {
+      const pName = nameInput.value.trim();
+      if (!pName) return alert('Por favor, informe seu Codenome de Agente.');
+      localStorage.setItem('todo_user_name', pName);
+      checkLoginState();
+      
+      // Volta estado form para futuro e vai pra home
+      step2.style.display = 'none';
+      step1.style.display = 'block';
+      nameInput.value = '';
+      
+      document.querySelector('a[data-target="home"]').click();
+    });
+  }
+
   // --- STARTUP ---
   updateGlobalStats();
   renderAgentCards();
   renderCamps();
   saveAndRenderPosts();
+  checkLoginState();
 });

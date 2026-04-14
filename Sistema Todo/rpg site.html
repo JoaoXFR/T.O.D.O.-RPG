@@ -110,15 +110,15 @@
           <h1 id="hero-heading" class="hero-title">
             <span class="title-line">Bem-vindo à</span>
             <span class="title-acronym">
-              <span class="letter" data-letter="T">T</span><span class="dot">.</span><span class="letter"
-                data-letter="O">O</span><span class="dot">.</span><span class="letter" data-letter="D">D</span><span
-                class="dot">.</span><span class="letter" data-letter="O">O</span><span class="dot">.</span>
+              <span class="letter" data-letter="T">T</span><span class="letter" data-letter="O">O</span><span
+                class="letter" data-letter="D">D</span><span class="letter" data-letter="O">O</span>
             </span>
 
           </h1>
 
           <p class="hero-description">
-            A plataforma definitiva para agentes da Ordem. Fichas digitais inteligentes, rolagem automática,
+            A plataforma definitiva para enfrentar o que foge da realidade. Fichas digitais inteligentes, rolagem
+            automática,
             gestão de campanhas e ferramentas exclusivas para mestres. Tudo em um único lugar — sombrio e seguro.
           </p>
 
@@ -628,7 +628,7 @@
          LOGIN SECTION
     ============================================================ -->
     <section id="login-section" class="section-darker tab-section" data-tab="login" aria-labelledby="login-heading"
-      style="min-height: 100vh; display: none; align-items: center; justify-content: center;">
+      style="min-height: 100vh; align-items: center; justify-content: center;">
       <div class="container" style="max-width: 450px; margin: 0 auto; padding: 4rem 1rem;">
         <div style="text-align: center; margin-bottom: 2rem;">
           <h2 id="login-heading" class="section-title"
@@ -636,9 +636,19 @@
             Acesso Restrito</h2>
           <p class="section-desc">Insira suas credenciais da Ordem.</p>
         </div>
-        <form id="login-form"
+        <!-- LOGIN STEP 1: Auth Options -->
+        <div id="login-step-1"
           style="background: var(--color-bg-3); padding: 2rem; border-radius: var(--radius-lg); border: 1px solid var(--color-border); box-shadow: 0 25px 80px rgba(0,0,0,0.5), 0 0 40px rgba(196,30,58,0.05);">
           <div style="margin-bottom: 1.5rem;">
+            <label
+              style="display: block; font-family: var(--font-mono); font-size: 0.8rem; color: var(--color-text-2); margin-bottom: 0.5rem; letter-spacing: 0.05em;">AUTENTICAÇÃO
+              PÚBLICA</label>
+            <button type="button" id="btn-google-login" class="btn btn-outline"
+              style="width: 100%; justify-content: center; margin-bottom: 1rem; border-color: #ea4335; color: #ea4335;">
+              <i class="fab fa-google" style="margin-right: 0.5rem;"></i> Login Seguro via Google
+            </button>
+            <div style="text-align: center; color: var(--color-text-3); font-size: 0.8rem; margin-bottom: 1rem;">Ou
+              utilize as credenciais diretas</div>
             <label
               style="display: block; font-family: var(--font-mono); font-size: 0.8rem; color: var(--color-text-2); margin-bottom: 0.5rem; letter-spacing: 0.05em;">ID
               DE AGENTE</label>
@@ -652,11 +662,37 @@
             <input type="password" placeholder="••••••••"
               style="width: 100%; padding: 0.8rem 1rem; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-sm); color: var(--color-text); outline: none;">
           </div>
-          <button type="button" class="btn btn-primary" style="width: 100%; justify-content: center;"
-            onclick="alert('Sistema de login será implementado na base de dados oficial. Por enquanto você já possui acesso total!'); document.querySelector('a[data-target=\\'home\\']').click();">
-            Iniciar Sessão Local
+          <button type="button" class="btn btn-primary" style="width: 100%; justify-content: center;">
+            Iniciar Sessão Restrita
           </button>
-        </form>
+        </div>
+
+        <!-- LOGIN STEP 2: Name configuration -->
+        <div id="login-step-2"
+          style="display: none; background: var(--color-bg-3); padding: 2rem; border-radius: var(--radius-lg); border: 1px solid var(--color-border); box-shadow: 0 25px 80px rgba(0,0,0,0.5), 0 0 40px rgba(196,30,58,0.05);">
+          <div style="margin-bottom: 2rem; text-align: center;">
+            <div
+              style="width: 60px; height: 60px; border-radius: 50%; background: var(--color-bg); border: 2px solid var(--color-red-light); margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: var(--color-red-light);">
+              <i class="fas fa-check"></i>
+            </div>
+            <h3 style="color: var(--color-text); font-size: 1.2rem; margin-bottom: 0.5rem;">Identificação Confirmada
+            </h3>
+            <p style="color: var(--color-text-2); font-size: 0.9rem;">Este parece ser o seu primeiro acesso simulado.
+              Identifique-se legalmente com o nome que a Ordem chamará você.</p>
+          </div>
+          <div style="margin-bottom: 2rem;">
+            <label
+              style="display: block; font-family: var(--font-mono); font-size: 0.8rem; color: var(--color-text-2); margin-bottom: 0.5rem; letter-spacing: 0.05em;">CODENOME
+              / NOME DE COMBATE</label>
+            <input type="text" id="new-agent-name-input" placeholder="Digite seu nome..."
+              style="width: 100%; padding: 0.8rem 1rem; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-sm); color: var(--color-text); outline: none; font-size: 1rem; text-align: center;"
+              autocomplete="off">
+          </div>
+          <button type="button" id="btn-finish-login" class="btn btn-primary"
+            style="width: 100%; justify-content: center;">
+            Finalizar Alistamento
+          </button>
+        </div>
       </div>
     </section>
 
