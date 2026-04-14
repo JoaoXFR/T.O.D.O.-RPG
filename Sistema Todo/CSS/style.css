@@ -2287,5 +2287,670 @@ button {
 }
 
 #login-section.active-tab {
-  display: flex !important; /* Login uses a centered flex layout explicitly */
+  display: flex !important;
+  /* Login uses a centered flex layout explicitly */
+}
+
+/* ── BESTIARY SECTION ──────────────────────────────────────── */
+.bestiary-segment {
+  margin-bottom: 2rem;
+}
+
+.bestiary-segment-header {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.bestiary-segment-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 1.2rem;
+  border-radius: 100px;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.bestiary-segment-label.official {
+  background: rgba(196, 30, 58, 0.12);
+  border: 1px solid rgba(196, 30, 58, 0.35);
+  color: var(--color-red-light);
+  box-shadow: 0 0 20px rgba(196, 30, 58, 0.1);
+}
+
+.bestiary-segment-label.community {
+  background: rgba(124, 58, 237, 0.12);
+  border: 1px solid rgba(124, 58, 237, 0.35);
+  color: var(--color-purple-light);
+  box-shadow: 0 0 20px rgba(124, 58, 237, 0.1);
+}
+
+.bestiary-segment-desc {
+  color: var(--color-text-3);
+  font-size: 0.9rem;
+}
+
+/* ── Bestiary Grid ─── */
+.bestiary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+/* ── Bestiary Card ─── */
+.bestiary-card {
+  position: relative;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform var(--transition-base), box-shadow var(--transition-base), border-color var(--transition-base);
+}
+
+.bestiary-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 50px rgba(0, 0, 0, 0.5);
+}
+
+.official-card:hover {
+  border-color: rgba(196, 30, 58, 0.4);
+  box-shadow: 0 16px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(196, 30, 58, 0.08);
+}
+
+.community-card:hover {
+  border-color: rgba(124, 58, 237, 0.4);
+  box-shadow: 0 16px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(124, 58, 237, 0.08);
+}
+
+.highlight-card {
+  border-color: rgba(196, 30, 58, 0.3);
+  box-shadow: 0 0 40px rgba(196, 30, 58, 0.1);
+}
+
+/* Card Top — icon + threat level */
+.bestiary-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  background: rgba(255, 255, 255, 0.02);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.bestiary-threat-level {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.8rem;
+  border-radius: 100px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.threat-2 {
+  background: rgba(100, 200, 100, 0.12);
+  border: 1px solid rgba(100, 200, 100, 0.3);
+  color: #6dc87a;
+}
+
+.threat-3 {
+  background: rgba(100, 200, 100, 0.12);
+  border: 1px solid rgba(100, 200, 100, 0.3);
+  color: #6dc87a;
+}
+
+.threat-4 {
+  background: rgba(251, 191, 36, 0.12);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  color: #fbbf24;
+}
+
+.threat-5 {
+  background: rgba(251, 191, 36, 0.12);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  color: #fbbf24;
+}
+
+.threat-6 {
+  background: rgba(251, 140, 36, 0.12);
+  border: 1px solid rgba(251, 140, 36, 0.3);
+  color: #f97316;
+}
+
+.threat-8 {
+  background: rgba(220, 38, 38, 0.15);
+  border: 1px solid rgba(220, 38, 38, 0.4);
+  color: #f87171;
+}
+
+.threat-10 {
+  background: rgba(150, 0, 150, 0.15);
+  border: 1px solid rgba(180, 0, 200, 0.4);
+  color: #d946ef;
+}
+
+.bestiary-card-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-sm);
+  background: rgba(196, 30, 58, 0.12);
+  border: 1px solid rgba(196, 30, 58, 0.25);
+  display: grid;
+  place-items: center;
+  font-size: 1.1rem;
+  color: var(--color-red-light);
+}
+
+.community-icon {
+  background: rgba(124, 58, 237, 0.12);
+  border-color: rgba(124, 58, 237, 0.25);
+  color: var(--color-purple-light);
+}
+
+/* Card Body */
+.bestiary-card-body {
+  padding: 1.25rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.bestiary-card-name {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  color: var(--color-text);
+  font-weight: 700;
+}
+
+.bestiary-card-type {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--color-red-light);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.bestiary-card-desc {
+  font-size: 0.875rem;
+  color: var(--color-text-2);
+  line-height: 1.6;
+  flex: 1;
+}
+
+/* Card Stats */
+.bestiary-card-stats {
+  display: flex;
+  gap: 0.75rem;
+  padding-top: 0.75rem;
+  margin-top: 0.5rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.bestiary-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  flex: 1;
+  background: rgba(255, 255, 255, 0.02);
+  padding: 0.4rem 0.25rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+}
+
+.bstat-label {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  color: var(--color-text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.bstat-val {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  color: var(--color-text);
+  font-weight: 700;
+}
+
+/* Card Footer */
+.bestiary-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  background: rgba(255, 255, 255, 0.02);
+  border-top: 1px solid var(--color-border);
+}
+
+.bestiary-official-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.75rem;
+  font-family: var(--font-mono);
+  color: var(--color-red-light);
+  letter-spacing: 0.04em;
+}
+
+.bestiary-official-badge.danger {
+  color: #f87171;
+  animation: pulse-danger 2s ease-in-out infinite;
+}
+
+@keyframes pulse-danger {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.65;
+  }
+}
+
+.bestiary-community-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.75rem;
+  font-family: var(--font-mono);
+  color: var(--color-purple-light);
+}
+
+.bestiary-card-date {
+  font-size: 0.68rem;
+  color: var(--color-text-3);
+  font-family: var(--font-mono);
+}
+
+/* Delete button */
+.bestiary-delete-btn {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.6rem;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-sm);
+  background: rgba(220, 38, 38, 0.08);
+  border: 1px solid rgba(220, 38, 38, 0.2);
+  color: var(--color-red-dark);
+  font-size: 0.7rem;
+  display: grid;
+  place-items: center;
+  opacity: 0;
+  transition: opacity var(--transition-base), background var(--transition-base), color var(--transition-base);
+  cursor: pointer;
+  z-index: 2;
+}
+
+.bestiary-card:hover .bestiary-delete-btn {
+  opacity: 1;
+}
+
+.bestiary-delete-btn:hover {
+  background: rgba(220, 38, 38, 0.2);
+  color: var(--color-red-light);
+}
+
+/* ── Add Threat Form ─── */
+.bestiary-add-form {
+  background: var(--color-bg-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 1.75rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3), 0 0 30px rgba(124, 58, 237, 0.04);
+}
+
+.bestiary-form-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.bestiary-form-header i {
+  font-size: 1.2rem;
+  color: var(--color-purple-light);
+}
+
+.bestiary-form-header h4 {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+.bestiary-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.bform-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.bform-group-full {
+  grid-column: 1 / -1;
+}
+
+.bform-group label {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--color-text-3);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.bform-group input,
+.bform-group textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color var(--transition-base), box-shadow var(--transition-base);
+  resize: vertical;
+}
+
+.bform-group input:focus,
+.bform-group textarea:focus {
+  border-color: rgba(124, 58, 237, 0.5);
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+}
+
+.bform-group input::placeholder,
+.bform-group textarea::placeholder {
+  color: var(--color-text-3);
+}
+
+.bform-actions {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* ── Empty State ─── */
+.bestiary-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 3rem 2rem;
+  text-align: center;
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text-3);
+  margin-top: 2.5rem;
+}
+
+.bestiary-empty-state i {
+  font-size: 2.5rem;
+  opacity: 0.3;
+}
+
+.bestiary-empty-state p {
+  font-size: 0.95rem;
+  color: var(--color-text-2);
+}
+
+.bestiary-empty-state span {
+  font-size: 0.8rem;
+  color: var(--color-text-3);
+}
+
+/* ── Responsive ─── */
+@media (max-width: 640px) {
+  .bestiary-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .bform-group-full {
+    grid-column: 1;
+  }
+
+  .bestiary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .bestiary-segment-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+}
+
+/* ── Bestiary Login Wall ─────────────────────────────────────── */
+.bestiary-login-wall {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  padding: 3.5rem 2rem;
+  text-align: center;
+  background: var(--color-bg-3);
+  border: 1px solid rgba(124, 58, 237, 0.2);
+  border-radius: var(--radius-lg);
+  box-shadow:
+    0 0 60px rgba(124, 58, 237, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle radial glow behind the wall */
+.bestiary-login-wall::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px;
+  height: 200px;
+  background: radial-gradient(ellipse, rgba(124, 58, 237, 0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.blw-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(124, 58, 237, 0.12);
+  border: 1px solid rgba(124, 58, 237, 0.3);
+  display: grid;
+  place-items: center;
+  font-size: 1.5rem;
+  color: var(--color-purple-light);
+  box-shadow: 0 0 24px rgba(124, 58, 237, 0.2);
+  animation: lock-pulse 3s ease-in-out infinite;
+}
+
+@keyframes lock-pulse {
+
+  0%,
+  100% {
+    box-shadow: 0 0 24px rgba(124, 58, 237, 0.2);
+  }
+
+  50% {
+    box-shadow: 0 0 40px rgba(124, 58, 237, 0.4);
+  }
+}
+
+.bestiary-login-wall h4 {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  color: var(--color-text);
+  font-weight: 700;
+}
+
+.bestiary-login-wall p {
+  font-size: 0.9rem;
+  color: var(--color-text-2);
+  line-height: 1.7;
+  max-width: 420px;
+}
+
+/* Agent name label inside the form header */
+.bestiary-agent-label {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--color-purple-light);
+  background: rgba(124, 58, 237, 0.1);
+  border: 1px solid rgba(124, 58, 237, 0.25);
+  padding: 0.2rem 0.7rem;
+  border-radius: 100px;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+}
+
+/* ── Nav Profile Dropdown ───────────────────────────────────── */
+.nav-user-panel {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* The trigger button */
+.nav-profile-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.35rem 0.9rem 0.35rem 0.6rem;
+  border-radius: 9999px;
+  background: rgba(196, 30, 58, 0.1);
+  border: 1px solid rgba(196, 30, 58, 0.3);
+  color: var(--color-red-light);
+  font-size: 0.8rem;
+  font-weight: 600;
+  font-family: var(--font-mono);
+  cursor: pointer;
+  transition: background var(--transition-base), box-shadow var(--transition-base);
+  white-space: nowrap;
+  max-width: 200px;
+  letter-spacing: 0.03em;
+}
+
+.nav-profile-btn:hover,
+.nav-profile-btn[aria-expanded="true"] {
+  background: rgba(196, 30, 58, 0.18);
+  box-shadow: 0 0 16px rgba(196, 30, 58, 0.2);
+}
+
+.nav-profile-icon {
+  font-size: 0.85rem;
+  opacity: 0.85;
+}
+
+.nav-profile-chevron {
+  font-size: 0.6rem;
+  opacity: 0.7;
+  transition: transform var(--transition-base);
+}
+
+.nav-profile-btn[aria-expanded="true"] .nav-profile-chevron {
+  transform: rotate(180deg);
+}
+
+/* The dropdown panel */
+.nav-profile-dropdown {
+  position: absolute;
+  top: calc(100% + 0.6rem);
+  right: 0;
+  min-width: 220px;
+  background: var(--color-bg-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.6),
+    0 0 30px rgba(196, 30, 58, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  padding: 0.5rem;
+  z-index: 500;
+  /* Hidden by default */
+  opacity: 0;
+  transform: translateY(-6px) scale(0.97);
+  pointer-events: none;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+.nav-profile-dropdown.open {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+/* Header: agent name */
+.npd-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.65rem 0.75rem;
+  border-radius: var(--radius-sm);
+  background: rgba(196, 30, 58, 0.06);
+  color: var(--color-red-light);
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.npd-divider {
+  height: 1px;
+  background: var(--color-border);
+  margin: 0.4rem 0.25rem;
+}
+
+/* Logout button inside dropdown */
+.npd-logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  border: none;
+  color: var(--color-text-2);
+  font-size: 0.85rem;
+  font-family: var(--font-body);
+  font-weight: 500;
+  cursor: pointer;
+  transition: background var(--transition-base), color var(--transition-base);
+  text-align: left;
+}
+
+.npd-logout-btn:hover {
+  background: rgba(220, 38, 38, 0.1);
+  color: #f87171;
 }

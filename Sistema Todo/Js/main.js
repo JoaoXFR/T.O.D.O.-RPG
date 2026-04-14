@@ -677,6 +677,196 @@ document.addEventListener('DOMContentLoaded', () => {
   if (btnTopCamp) btnTopCamp.addEventListener('click', handleCreateCamp);
   if (btnCenterCamp) btnCenterCamp.addEventListener('click', handleCreateCamp);
 
+  // --- BESTIARY ENGINE ---
+  const communityContent = document.getElementById('bestiary-community-content');
+  const loginWall        = document.getElementById('bestiary-login-wall');
+  const communityGrid    = document.getElementById('community-bestiary-grid');
+  const communityEmpty   = document.getElementById('community-bestiary-empty');
+  const agentNameLabel   = document.getElementById('bestiary-agent-name');
+  const btnSubmitThreat  = document.getElementById('btn-submit-threat');
+
+  const THREAT_ICONS = [
+    'fas fa-ghost', 'fas fa-skull', 'fas fa-spider', 'fas fa-eye',
+    'fas fa-skull-crossbones', 'fas fa-dragon', 'fas fa-bat',
+    'fas fa-biohazard', 'fas fa-radiation', 'fas fa-cloud'
+  ];
+
+  // Helper — returns the per-user localStorage key, or null if not logged in
+  function getUserBestiaryKey() {
+    const userName = localStorage.getItem('todo_user_name');
+    if (!userName) return null;
+    // Sanitise name so it is safe as a key
+    return 'todo_bestiary_' + userName.toLowerCase().replace(/\s+/g, '_');
+  }
+
+  function getThreatLevelClass(level) {
+    const lvl = parseInt(level) || 1;
+    if (lvl <= 2) return 'threat-2';
+    if (lvl <= 4) return 'threat-4';
+    if (lvl <= 6) return 'threat-6';
+    if (lvl <= 8) return 'threat-8';
+    return 'threat-10';
+  }
+
+  // Render threats that belong to the currently logged-in user
+  function renderCommunityThreats() {
+    if (!communityGrid) return;
+    const key = getUserBestiaryKey();
+    if (!key) return; // not logged in — guard
+
+    const threats = JSON.parse(localStorage.getItem(key) || '[]');
+    communityGrid.innerHTML = '';
+
+    if (communityEmpty) {
+      communityEmpty.style.display = threats.length === 0 ? 'flex' : 'none';
+    }
+
+    threats.forEach((threat, index) => {
+      const card = document.createElement('article');
+      card.className = 'bestiary-card community-card';
+      card.setAttribute('role', 'listitem');
+
+      const icon     = THREAT_ICONS[index % THREAT_ICONS.length];
+      const lvlClass = getThreatLevelClass(threat.level);
+      const naLabel  = threat.level ? `N.A. ${threat.level}` : 'N.A. ?';
+
+      card.innerHTML = `
+        <button class="bestiary-delete-btn" aria-label="Remover ameaça">
+          <i class="fas fa-trash"></i>
+        </button>
+        <div class="bestiary-card-top">
+          <div class="bestiary-threat-level ${lvlClass}">
+            <span>${naLabel}</span>
+          </div>
+          <div class="bestiary-card-icon community-icon">
+            <i class="${icon}"></i>
+          </div>
+        </div>
+        <div class="bestiary-card-body">
+          <h3 class="bestiary-card-name">${threat.name}</h3>
+          <span class="bestiary-card-type">${threat.type}</span>
+          <p class="bestiary-card-desc">${threat.desc}</p>
+          <div class="bestiary-card-stats">
+            <div class="bestiary-stat">
+              <span class="bstat-label">PV</span>
+              <span class="bstat-val">${threat.pv || '?'}</span>
+            </div>
+            <div class="bestiary-stat">
+              <span class="bstat-label">DEF</span>
+              <span class="bstat-val">${threat.def || '?'}</span>
+            </div>
+            <div class="bestiary-stat">
+              <span class="bstat-label">SAN</span>
+              <span class="bstat-val">${threat.san || '?'}</span>
+            </div>
+          </div>
+        </div>
+        <div class="bestiary-card-footer">
+          <span class="bestiary-community-badge">
+            <i class="fas fa-user-secret"></i> ${threat.author}
+          </span>
+          <small class="bestiary-card-date">${threat.date}</small>
+        </div>
+      `;
+
+      card.querySelector('.bestiary-delete-btn').addEventListener('click', () => {
+        const key2 = getUserBestiaryKey();
+        if (!key2) return;
+        const list = JSON.parse(localStorage.getItem(key2) || '[]');
+        list.splice(index, 1);
+        localStorage.setItem(key2, JSON.stringify(list));
+        renderCommunityThreats();
+      });
+
+      communityGrid.appendChild(card);
+    });
+  }
+
+  // Show or hide the community segment based on login state
+  // Called on startup AND after every login/logout event
+  function refreshBestiaryForUser() {
+    const userName = localStorage.getItem('todo_user_name');
+    const isLoggedIn = !!userName;
+
+    if (loginWall)        loginWall.style.display        = isLoggedIn ? 'none' : 'flex';
+    if (communityContent) communityContent.style.display = isLoggedIn ? 'block' : 'none';
+
+    if (isLoggedIn) {
+      // Update the agent-name label inside the form header
+      if (agentNameLabel) agentNameLabel.textContent = userName;
+      renderCommunityThreats();
+    } else {
+      // Clear any rendered cards from previous session
+      if (communityGrid) communityGrid.innerHTML = '';
+      if (communityEmpty) communityEmpty.style.display = 'none';
+    }
+  }
+
+  // Submit handler
+  if (btnSubmitThreat) {
+    btnSubmitThreat.addEventListener('click', () => {
+      const key = getUserBestiaryKey();
+      if (!key) return; // safety guard
+
+      const nameEl  = document.getElementById('bthreat-name');
+      const typeEl  = document.getElementById('bthreat-type');
+      const descEl  = document.getElementById('bthreat-desc');
+      const pvEl    = document.getElementById('bthreat-pv');
+      const defEl   = document.getElementById('bthreat-def');
+      const sanEl   = document.getElementById('bthreat-san');
+      const levelEl = document.getElementById('bthreat-level');
+
+      const name = nameEl?.value.trim();
+      const type = typeEl?.value.trim();
+      const desc = descEl?.value.trim();
+
+      // Validate required fields
+      if (!name || !type || !desc) {
+        [nameEl, typeEl, descEl].forEach(el => {
+          if (el && !el.value.trim()) {
+            el.style.borderColor = 'var(--color-red-light)';
+            el.style.boxShadow   = '0 0 8px var(--color-red-glow)';
+            setTimeout(() => { el.style.borderColor = ''; el.style.boxShadow = ''; }, 2500);
+          }
+        });
+        return;
+      }
+
+      const author   = localStorage.getItem('todo_user_name') || 'Agente Anônimo';
+      const now      = new Date();
+      const dateStr  = now.toLocaleDateString('pt-BR') + ' '
+                     + now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+
+      const threats = JSON.parse(localStorage.getItem(key) || '[]');
+      threats.unshift({
+        name,
+        type,
+        desc,
+        pv:     pvEl?.value.trim()  || '',
+        def:    defEl?.value.trim() || '',
+        san:    sanEl?.value.trim() || '',
+        level:  levelEl?.value      || '',
+        author,
+        date:   dateStr
+      });
+      localStorage.setItem(key, JSON.stringify(threats));
+
+      // Clear form
+      [nameEl, typeEl, descEl, pvEl, defEl, sanEl].forEach(el => { if (el) el.value = ''; });
+      if (levelEl) levelEl.value = '';
+
+      // Button feedback
+      btnSubmitThreat.innerHTML = '<i class="fas fa-check"></i> Registrado!';
+      btnSubmitThreat.style.background = 'var(--color-red-dark)';
+      setTimeout(() => {
+        btnSubmitThreat.innerHTML = '<i class="fas fa-skull"></i> Registrar Ameaça';
+        btnSubmitThreat.style.background = '';
+      }, 1800);
+
+      renderCommunityThreats();
+    });
+  }
+
   // --- FORUM ENGINE ---
   const forumInput = document.getElementById('forum-input');
   const btnPostForum = document.getElementById('btn-post-forum');
@@ -743,53 +933,129 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // --- LOGIN ENGINE ---
-  const btnGoogleLogin = document.getElementById('btn-google-login');
-  const step1 = document.getElementById('login-step-1');
-  const step2 = document.getElementById('login-step-2');
-  const btnFinishLogin = document.getElementById('btn-finish-login');
-  const nameInput = document.getElementById('new-agent-name-input');
-  
-  // Capturando links que disparam a ida para login
-  const navLoginBtns = document.querySelectorAll('a[data-target="login"]');
-  
-  function checkLoginState() {
-    let savedName = localStorage.getItem('todo_user_name');
-    if (savedName) {
-      if(navLoginBtns.length > 0) {
-        navLoginBtns.forEach(btn => {
-          btn.innerText = savedName;
-        });
-      }
-    }
-  }
+  const btnGoogleLogin   = document.getElementById('btn-google-login');
+  const step1            = document.getElementById('login-step-1');
+  const step2            = document.getElementById('login-step-2');
+  const step3            = document.getElementById('login-step-3');
+  const btnFinishLogin   = document.getElementById('btn-finish-login');
+  const nameInput        = document.getElementById('new-agent-name-input');
+  const step3NameEl      = document.getElementById('login-step3-name');
 
-  if (btnGoogleLogin) {
-    btnGoogleLogin.addEventListener('click', () => {
-      let savedName = localStorage.getItem('todo_user_name');
-      if (savedName) {
-        // Já tem conta registrada -> Logo Instantâneo
-        document.querySelector('a[data-target="home"]').click(); 
-      } else {
-        // Primeiro acesso simulado com o Google -> pede nome
-        step1.style.display = 'none';
-        step2.style.display = 'block';
+  // Nav elements
+  const navBtnEnter      = document.getElementById('nav-btn-enter');
+  const navUserPanel     = document.getElementById('nav-user-panel');
+  const navUserNameBtn   = document.getElementById('nav-user-name-btn');
+  const navProfileBtn    = document.getElementById('nav-profile-btn');
+  const navProfileDrop   = document.getElementById('nav-profile-dropdown');
+  const npdAgentName     = document.getElementById('npd-agent-name');
+  const btnNavLogout     = document.getElementById('btn-nav-logout');
+  const mobileLoginItem  = document.getElementById('mobile-login-item');
+
+  // ── Profile dropdown toggle ──────────────────────────────
+  if (navProfileBtn && navProfileDrop) {
+    navProfileBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = navProfileDrop.classList.toggle('open');
+      navProfileBtn.setAttribute('aria-expanded', String(isOpen));
+      navProfileDrop.setAttribute('aria-hidden', String(!isOpen));
+    });
+
+    // Close on outside click
+    document.addEventListener('click', () => {
+      navProfileDrop.classList.remove('open');
+      navProfileBtn.setAttribute('aria-expanded', 'false');
+      navProfileDrop.setAttribute('aria-hidden', 'true');
+    });
+
+    // Prevent closing when clicking inside the dropdown
+    navProfileDrop.addEventListener('click', (e) => e.stopPropagation());
+
+    // Close on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        navProfileDrop.classList.remove('open');
+        navProfileBtn.setAttribute('aria-expanded', 'false');
       }
     });
   }
 
+  // ── checkLoginState ──────────────────────────────────────
+  function checkLoginState() {
+    const savedName = localStorage.getItem('todo_user_name');
+
+    if (savedName) {
+      // Nav: hide "Entrar", show profile button
+      if (navBtnEnter)    navBtnEnter.style.display  = 'none';
+      if (navUserPanel)   navUserPanel.style.display  = 'flex';
+      if (navUserNameBtn) navUserNameBtn.textContent  = savedName;
+      if (npdAgentName)   npdAgentName.textContent    = savedName;
+
+      // Mobile menu: show login link to take user to step-3
+      if (mobileLoginItem) mobileLoginItem.style.display = 'block';
+
+      // Login page: show step-3
+      if (step1) step1.style.display = 'none';
+      if (step2) step2.style.display = 'none';
+      if (step3) step3.style.display = 'block';
+      if (step3NameEl) step3NameEl.textContent = savedName;
+
+    } else {
+      // Nav: show "Entrar", hide profile button
+      if (navBtnEnter)  navBtnEnter.style.display  = '';
+      if (navUserPanel) navUserPanel.style.display  = 'none';
+
+      // Mobile menu
+      if (mobileLoginItem) mobileLoginItem.style.display = 'block';
+
+      // Login page: show step-1
+      if (step1) step1.style.display = 'block';
+      if (step2) step2.style.display = 'none';
+      if (step3) step3.style.display = 'none';
+    }
+  }
+
+  // ── Logout handler ──────────────────────────────────────
+  function handleLogout() {
+    // Close dropdown first
+    if (navProfileDrop) {
+      navProfileDrop.classList.remove('open');
+      if (navProfileBtn) navProfileBtn.setAttribute('aria-expanded', 'false');
+    }
+    localStorage.removeItem('todo_user_name');
+    checkLoginState();
+    refreshBestiaryForUser();
+    // Return to home
+    const homeLink = document.querySelector('a[data-target="home"]');
+    if (homeLink) homeLink.click();
+  }
+
+  if (btnNavLogout) btnNavLogout.addEventListener('click', handleLogout);
+
+  // ── Google Login ────────────────────────────────────────
+  if (btnGoogleLogin) {
+    btnGoogleLogin.addEventListener('click', () => {
+      const savedName = localStorage.getItem('todo_user_name');
+      if (savedName) {
+        const homeLink = document.querySelector('a[data-target="home"]');
+        if (homeLink) homeLink.click();
+      } else {
+        if (step1) step1.style.display = 'none';
+        if (step2) step2.style.display = 'block';
+      }
+    });
+  }
+
+  // ── Finish login (step 2) ────────────────────────────────
   if (btnFinishLogin && nameInput) {
     btnFinishLogin.addEventListener('click', () => {
       const pName = nameInput.value.trim();
       if (!pName) return alert('Por favor, informe seu Codenome de Agente.');
       localStorage.setItem('todo_user_name', pName);
-      checkLoginState();
-      
-      // Volta estado form para futuro e vai pra home
-      step2.style.display = 'none';
-      step1.style.display = 'block';
       nameInput.value = '';
-      
-      document.querySelector('a[data-target="home"]').click();
+      checkLoginState();
+      refreshBestiaryForUser();
+      const homeLink = document.querySelector('a[data-target="home"]');
+      if (homeLink) homeLink.click();
     });
   }
 
@@ -798,5 +1064,6 @@ document.addEventListener('DOMContentLoaded', () => {
   renderAgentCards();
   renderCamps();
   saveAndRenderPosts();
+  refreshBestiaryForUser(); // show login-wall OR user's threats depending on session
   checkLoginState();
 });

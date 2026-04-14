@@ -44,9 +44,29 @@
         <li><a href="#homebrew" class="tab-link" data-target="homebrew">Homebrew</a></li>
       </ul>
 
-      <div class="nav-actions">
-        <a href="#login" class="btn btn-outline btn-sm tab-link"
+      <div class="nav-actions" id="nav-actions">
+        <!-- Not logged in -->
+        <a href="#login" id="nav-btn-enter" class="btn btn-outline btn-sm tab-link"
           style="padding: 0.35rem 1rem; border-radius: 9999px; font-size: 0.8rem;" data-target="login">Entrar</a>
+        <!-- Logged in: profile dropdown (hidden by default, shown via JS) -->
+        <div id="nav-user-panel" class="nav-user-panel" style="display:none;">
+          <button id="nav-profile-btn" class="nav-profile-btn" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-user-secret nav-profile-icon"></i>
+            <span id="nav-user-name-btn"></span>
+            <i class="fas fa-chevron-down nav-profile-chevron"></i>
+          </button>
+          <!-- Dropdown menu -->
+          <div id="nav-profile-dropdown" class="nav-profile-dropdown" aria-hidden="true">
+            <div class="npd-header">
+              <i class="fas fa-user-secret"></i>
+              <span id="npd-agent-name"></span>
+            </div>
+            <div class="npd-divider"></div>
+            <button id="btn-nav-logout" class="npd-logout-btn">
+              <i class="fas fa-sign-out-alt"></i> Encerrar Sessão
+            </button>
+          </div>
+        </div>
       </div>
 
       <button id="nav-toggle" class="nav-toggle" aria-label="Abrir menu" aria-expanded="false">
@@ -61,8 +81,7 @@
         <li><a href="#campaigns" class="tab-link" data-target="campaigns">Campanhas</a></li>
         <li><a href="#bestiary" class="tab-link" data-target="bestiary">Bestiário</a></li>
         <li><a href="#homebrew" class="tab-link" data-target="homebrew">Homebrew</a></li>
-        <li><a href="#login" class="tab-link" data-target="login" style="color: var(--color-red-light);">Entrar na
-            Plataforma</a></li>
+        <li id="mobile-login-item"><a href="#login" class="tab-link" data-target="login" style="color: var(--color-red-light);">Entrar na Plataforma</a></li>
       </ul>
     </div>
   </header>
@@ -333,90 +352,261 @@
     </section>
 
     <!-- ============================================================
-         BESTIARY TOOLS SECTION
+         BESTIARY SECTION — TWO SEGMENTS
     ============================================================ -->
     <section id="bestiary-section" class="section-dark tab-section" data-tab="bestiary"
       aria-labelledby="bestiary-heading">
       <div class="container">
+
+        <!-- Section Header -->
         <header class="section-header">
           <div class="section-tag">
             <i class="fas fa-book-dead" aria-hidden="true"></i>
             Bestiário
           </div>
           <h2 id="bestiary-heading" class="section-title">
-            Ferramentas definitivas<br /><em>para o Mestre</em>
+            Catálogo de<br /><em>Ameaças Paranormais</em>
           </h2>
           <p class="section-desc">
-            Tudo o que você precisa para conduzir sessões épicas e assustadoras, reunido em uma interface
-            poderosa e intuitiva. Controle NPCs, trilhas sonoras, rolagens secretas e muito mais.
+            Conheça as entidades classificadas pela Ordem. Consulte o arquivo oficial e registre seus próprios
+            encontros — cada ameaça documentada salva uma vida de agente.
           </p>
         </header>
 
-        <div class="tools-grid" role="list">
-          <article class="tool-card" role="listitem">
-            <div class="tool-card-header">
-              <div class="tool-icon red">
-                <i class="fas fa-theater-masks"></i>
-              </div>
-              <h3>Gestão de NPCs</h3>
+        <!-- ── SEGMENT 1: OFFICIAL THREATS ─────────────────────── -->
+        <div class="bestiary-segment">
+          <div class="bestiary-segment-header">
+            <div class="bestiary-segment-label official">
+              <i class="fas fa-shield-alt"></i>
+              <span>Arquivo Oficial</span>
             </div>
-            <p>Crie, edite e acesse fichas de NPCs e criaturas paranormais instantaneamente durante a sessão.</p>
-            <div class="tool-badge">Essencial</div>
-          </article>
+            <p class="bestiary-segment-desc">Ameaças catalogadas e validadas pela Ordem Paranormal.</p>
+          </div>
 
-          <article class="tool-card" role="listitem">
-            <div class="tool-card-header">
-              <div class="tool-icon purple">
-                <i class="fas fa-dice"></i>
-              </div>
-              <h3>Mesa de Rolagem</h3>
-            </div>
-            <p>Realize rolagens secretas, testes automáticos e compartilhe resultados em tempo real com os jogadores.
-            </p>
-            <div class="tool-badge">Popular</div>
-          </article>
+          <div class="bestiary-grid" id="official-bestiary-grid" role="list">
 
-          <article class="tool-card highlight" role="listitem">
-            <div class="tool-card-header">
-              <div class="tool-icon gold">
-                <i class="fas fa-map-marked-alt"></i>
+            <!-- Official Threat Card 1 -->
+            <article class="bestiary-card official-card" role="listitem">
+              <div class="bestiary-card-top">
+                <div class="bestiary-threat-level threat-5">
+                  <span>N.A. 5</span>
+                </div>
+                <div class="bestiary-card-icon">
+                  <i class="fas fa-ghost"></i>
+                </div>
               </div>
-              <h3>Mapa Interativo</h3>
-            </div>
-            <p>Importe mapas, posicione tokens, revele áreas e controle a visibilidade com Fog of War paranormal.</p>
-            <div class="tool-badge">Novo</div>
-          </article>
+              <div class="bestiary-card-body">
+                <h3 class="bestiary-card-name">Espectro Consumidor</h3>
+                <span class="bestiary-card-type">Morto-Vivo · Incorporal</span>
+                <p class="bestiary-card-desc">Alma corrompida pelo Outro Lado que drena a sanidade de suas vítimas através do contato visual. Deixa a vítima em estado de torpor paranormal.</p>
+                <div class="bestiary-card-stats">
+                  <div class="bestiary-stat">
+                    <span class="bstat-label">PV</span>
+                    <span class="bstat-val">45</span>
+                  </div>
+                  <div class="bestiary-stat">
+                    <span class="bstat-label">DEF</span>
+                    <span class="bstat-val">14</span>
+                  </div>
+                  <div class="bestiary-stat">
+                    <span class="bstat-label">SAN</span>
+                    <span class="bstat-val">-1d6</span>
+                  </div>
+                </div>
+              </div>
+              <div class="bestiary-card-footer">
+                <span class="bestiary-official-badge"><i class="fas fa-check-circle"></i> Validado</span>
+              </div>
+            </article>
 
-          <article class="tool-card" role="listitem">
-            <div class="tool-card-header">
-              <div class="tool-icon blue">
-                <i class="fas fa-music"></i>
+            <!-- Official Threat Card 2 -->
+            <article class="bestiary-card official-card" role="listitem">
+              <div class="bestiary-card-top">
+                <div class="bestiary-threat-level threat-3">
+                  <span>N.A. 3</span>
+                </div>
+                <div class="bestiary-card-icon">
+                  <i class="fas fa-spider"></i>
+                </div>
               </div>
-              <h3>Ambiente Sonoro</h3>
-            </div>
-            <p>Biblioteca de trilhas e efeitos sonoros paranormais para intensificar a imersão das suas sessões.</p>
-          </article>
+              <div class="bestiary-card-body">
+                <h3 class="bestiary-card-name">Sombra Rastejante</h3>
+                <span class="bestiary-card-type">Entidade · Material</span>
+                <p class="bestiary-card-desc">Criatura densa e escura que se move pelas sombras. Paralisa a vítima com medo irracional antes de atacar fisicamente.</p>
+                <div class="bestiary-card-stats">
+                  <div class="bestiary-stat">
+                    <span class="bstat-label">PV</span>
+                    <span class="bstat-val">28</span>
+                  </div>
+                  <div class="bestiary-stat">
+                    <span class="bstat-label">DEF</span>
+                    <span class="bstat-val">11</span>
+                  </div>
+                  <div class="bestiary-stat">
+                    <span class="bstat-label">SAN</span>
+                    <span class="bstat-val">-1d4</span>
+                  </div>
+                </div>
+              </div>
+              <div class="bestiary-card-footer">
+                <span class="bestiary-official-badge"><i class="fas fa-check-circle"></i> Validado</span>
+              </div>
+            </article>
 
-          <article class="tool-card" role="listitem">
-            <div class="tool-card-header">
-              <div class="tool-icon green">
-                <i class="fas fa-hourglass-half"></i>
+            <!-- Official Threat Card 3 -->
+            <article class="bestiary-card official-card highlight-card" role="listitem">
+              <div class="bestiary-card-top">
+                <div class="bestiary-threat-level threat-8">
+                  <span>N.A. 8</span>
+                </div>
+                <div class="bestiary-card-icon">
+                  <i class="fas fa-skull-crossbones"></i>
+                </div>
               </div>
-              <h3>Cronômetro de Sessão</h3>
-            </div>
-            <p>Controle o tempo de combate, rodadas e turnos com timers automáticos e alertas visuais.</p>
-          </article>
+              <div class="bestiary-card-body">
+                <h3 class="bestiary-card-name">Deus Encarcerado</h3>
+                <span class="bestiary-card-type">Divindade · Abominação</span>
+                <p class="bestiary-card-desc">Entidade de poder incomensurável presa entre os planos. Sua mera presença deforma a realidade ao redor. Confronto direto é suicídio.</p>
+                <div class="bestiary-card-stats">
+                  <div class="bestiary-stat">
+                    <span class="bstat-label">PV</span>
+                    <span class="bstat-val">∞</span>
+                  </div>
+                  <div class="bestiary-stat">
+                    <span class="bstat-label">DEF</span>
+                    <span class="bstat-val">22</span>
+                  </div>
+                  <div class="bestiary-stat">
+                    <span class="bstat-label">SAN</span>
+                    <span class="bstat-val">-3d6</span>
+                  </div>
+                </div>
+              </div>
+              <div class="bestiary-card-footer">
+                <span class="bestiary-official-badge danger"><i class="fas fa-radiation"></i> Crítico</span>
+              </div>
+            </article>
 
-          <article class="tool-card" role="listitem">
-            <div class="tool-card-header">
-              <div class="tool-icon crimson">
-                <i class="fas fa-scroll"></i>
+            <!-- Official Threat Card 4 -->
+            <article class="bestiary-card official-card" role="listitem">
+              <div class="bestiary-card-top">
+                <div class="bestiary-threat-level threat-4">
+                  <span>N.A. 4</span>
+                </div>
+                <div class="bestiary-card-icon">
+                  <i class="fas fa-eye"></i>
+                </div>
               </div>
-              <h3>Gerador de Missões</h3>
-            </div>
-            <p>Gere cenários, NPCs aleatórios e eventos paranormais para suas sessões de improviso.</p>
-          </article>
+              <div class="bestiary-card-body">
+                <h3 class="bestiary-card-name">Observador</h3>
+                <span class="bestiary-card-type">Entidade · Onividente</span>
+                <p class="bestiary-card-desc">Ser que existe parcialmente no plano mental. Monitora as ações dos agentes e transmite informações para outras entidades do Outro Lado.</p>
+                <div class="bestiary-card-stats">
+                  <div class="bestiary-stat">
+                    <span class="bstat-label">PV</span>
+                    <span class="bstat-val">32</span>
+                  </div>
+                  <div class="bestiary-stat">
+                    <span class="bstat-label">DEF</span>
+                    <span class="bstat-val">16</span>
+                  </div>
+                  <div class="bestiary-stat">
+                    <span class="bstat-label">SAN</span>
+                    <span class="bstat-val">-1d8</span>
+                  </div>
+                </div>
+              </div>
+              <div class="bestiary-card-footer">
+                <span class="bestiary-official-badge"><i class="fas fa-check-circle"></i> Validado</span>
+              </div>
+            </article>
+
+          </div>
         </div>
+
+        <!-- ── SEGMENT 2: COMMUNITY REGISTRY ───────────────────── -->
+        <div class="bestiary-segment" style="margin-top: 5rem; padding-top: 4rem; border-top: 1px solid var(--color-border);">
+          <div class="bestiary-segment-header">
+            <div class="bestiary-segment-label community">
+              <i class="fas fa-users"></i>
+              <span>Registro da Comunidade</span>
+            </div>
+            <p class="bestiary-segment-desc">Encontrou algo novo? Documente sua ameaça e ajude outros agentes a sobreviver.</p>
+          </div>
+
+          <!-- ── LOGIN WALL (shown when not logged in) ── -->
+          <div id="bestiary-login-wall" class="bestiary-login-wall">
+            <div class="blw-icon">
+              <i class="fas fa-lock"></i>
+            </div>
+            <h4>Acesso Restrito</h4>
+            <p>Esta seção é exclusiva para Agentes identificados.<br />Faça login para registrar e visualizar suas ameaças pessoais.</p>
+            <a href="#login" class="btn btn-primary tab-link" data-target="login">
+              <i class="fas fa-sign-in-alt"></i> Identificar-se
+            </a>
+          </div>
+
+          <!-- ── LOGGED-IN CONTENT (hidden until login) ── -->
+          <div id="bestiary-community-content" style="display: none;">
+
+            <!-- Add Threat Form -->
+            <div class="bestiary-add-form" id="bestiary-add-form">
+              <div class="bestiary-form-header">
+                <i class="fas fa-plus-circle"></i>
+                <h4>Registrar Nova Ameaça</h4>
+                <span id="bestiary-agent-name" class="bestiary-agent-label"></span>
+              </div>
+              <div class="bestiary-form-grid">
+                <div class="bform-group">
+                  <label for="bthreat-name">Nome da Ameaça *</label>
+                  <input type="text" id="bthreat-name" placeholder="Ex: Eco das Trevas" maxlength="50" autocomplete="off" />
+                </div>
+                <div class="bform-group">
+                  <label for="bthreat-type">Tipo / Categoria *</label>
+                  <input type="text" id="bthreat-type" placeholder="Ex: Entidade · Incorporal" maxlength="40" autocomplete="off" />
+                </div>
+                <div class="bform-group bform-group-full">
+                  <label for="bthreat-desc">Descrição *</label>
+                  <textarea id="bthreat-desc" placeholder="Descreva o comportamento, poderes e como a ameaça age..." maxlength="280" rows="3"></textarea>
+                </div>
+                <div class="bform-group">
+                  <label for="bthreat-pv">Pontos de Vida</label>
+                  <input type="text" id="bthreat-pv" placeholder="Ex: 30 ou 2d20" maxlength="10" autocomplete="off" />
+                </div>
+                <div class="bform-group">
+                  <label for="bthreat-def">Defesa</label>
+                  <input type="text" id="bthreat-def" placeholder="Ex: 12" maxlength="10" autocomplete="off" />
+                </div>
+                <div class="bform-group">
+                  <label for="bthreat-san">Dano de Sanidade</label>
+                  <input type="text" id="bthreat-san" placeholder="Ex: -1d6" maxlength="10" autocomplete="off" />
+                </div>
+                <div class="bform-group">
+                  <label for="bthreat-level">Nível de Ameaça (1-10)</label>
+                  <input type="number" id="bthreat-level" placeholder="Ex: 3" min="1" max="10" />
+                </div>
+              </div>
+              <div class="bform-actions">
+                <button class="btn btn-primary" id="btn-submit-threat">
+                  <i class="fas fa-skull"></i> Registrar Ameaça
+                </button>
+              </div>
+            </div>
+
+            <!-- Community Threats List -->
+            <div id="community-bestiary-grid" class="bestiary-grid" role="list" style="margin-top: 2.5rem;">
+              <!-- Community cards rendered by JS -->
+            </div>
+            <div id="community-bestiary-empty" class="bestiary-empty-state" style="display:none;">
+              <i class="fas fa-book-dead"></i>
+              <p>Nenhuma ameaça registrada ainda.</p>
+              <span>Seja o primeiro a documentar um encontro paranormal.</span>
+            </div>
+
+          </div>
+
+        </div>
+
       </div>
     </section>
 
@@ -693,6 +883,21 @@
             Finalizar Alistamento
           </button>
         </div>
+
+        <!-- LOGIN STEP 3: Already logged in state -->
+        <div id="login-step-3"
+          style="display: none; background: var(--color-bg-3); padding: 2rem; border-radius: var(--radius-lg); border: 1px solid var(--color-border); box-shadow: 0 25px 80px rgba(0,0,0,0.5), 0 0 40px rgba(196,30,58,0.05); text-align: center;">
+          <div style="width: 64px; height: 64px; border-radius: 50%; background: rgba(196,30,58,0.12); border: 2px solid var(--color-red-light); margin: 0 auto 1.25rem; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: var(--color-red-light);">
+            <i class="fas fa-user-secret"></i>
+          </div>
+          <h3 style="color: var(--color-text); font-size: 1.1rem; margin-bottom: 0.4rem;">Agente Identificado</h3>
+          <p id="login-step3-name" style="font-family: var(--font-mono); font-size: 1rem; color: var(--color-red-light); margin-bottom: 0.5rem; font-weight: 700; letter-spacing: 0.05em;"></p>
+          <p style="color: var(--color-text-2); font-size: 0.85rem; margin-bottom: 1rem; line-height: 1.6;">Você está conectado à rede da Ordem Paranormal.<br/>Suas ameaças pessoais estão protegidas e ativas.</p>
+          <p style="color: var(--color-text-3); font-size: 0.78rem; font-family: var(--font-mono);">
+            <i class="fas fa-info-circle"></i> Para encerrar a sessão, utilize o menu do seu perfil no topo da página.
+          </p>
+        </div>
+
       </div>
     </section>
 
