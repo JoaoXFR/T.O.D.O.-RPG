@@ -527,9 +527,223 @@ console.log(
 );
 
 /* ══════════════════════════════════════════════════════════════
-   APP STATE & LOCALSTORAGE MANAGER
-══════════════════════════════════════════════════════════════ */
+    APP STATE & LOCALSTORAGE MANAGER
+   ══════════════════════════════════════════════════════════════ */
 document.addEventListener('DOMContentLoaded', () => {
+
+  // --- CUSTOM POPUP SYSTEM ---
+  const customPopup = document.getElementById('custom-popup');
+  const popupMessage = customPopup?.querySelector('.popup-message');
+  const popupClose = customPopup?.querySelector('.popup-close');
+  const popupOverlay = customPopup?.querySelector('.popup-overlay');
+
+  function showPopup(message) {
+    if (!customPopup || !popupMessage) return;
+    popupMessage.textContent = message;
+    customPopup.classList.add('show');
+  }
+
+  function hidePopup() {
+    if (!customPopup) return;
+    customPopup.classList.remove('show');
+  }
+
+  if (popupClose) {
+    popupClose.addEventListener('click', hidePopup);
+  }
+  if (popupOverlay) {
+    popupOverlay.addEventListener('click', hidePopup);
+  }
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') hidePopup();
+  });
+
+  // --- SHEET WIZARD ---
+  const sheetSection = document.getElementById('sheet-section');
+  const sheetTabs = document.querySelectorAll('.sheet-tab');
+  const sheetSteps = document.querySelectorAll('.sheet-step');
+  const btnBackToAgents = document.getElementById('btn-back-to-agents');
+  const btnSaveSheet = document.getElementById('btn-save-sheet');
+  const btnFinishSheet = document.getElementById('btn-finish-sheet');
+  const btnNextAttr = document.getElementById('btn-next-attr');
+  const pointsRemainingEl = document.getElementById('points-remaining');
+  const attrInputs = document.querySelectorAll('.attr-input');
+  const attrBars = document.querySelectorAll('.attr-bar-fill');
+
+  const TOTAL_POINTS = 9;
+  const MAX_ATTR_VALUE = 3;
+  const BASE_VALUE = 0;
+  let usedPoints = 0;
+
+  function updatePointsDisplay() {
+    const remaining = TOTAL_POINTS - usedPoints;
+    if (pointsRemainingEl) {
+      pointsRemainingEl.textContent = remaining;
+      pointsRemainingEl.classList.toggle('zero', remaining === 0);
+    }
+  }
+
+  function calculateUsedPoints() {
+    let total = 0;
+    attrInputs.forEach(input => {
+      const val = parseInt(input.value) || BASE_VALUE;
+      total += (val - BASE_VALUE);
+    });
+    return total;
+  }
+
+  // Inicializar display de pontos
+  usedPoints = calculateUsedPoints();
+  updatePointsDisplay();
+
+  function goToSheetStep(stepNum) {
+    sheetTabs.forEach(tab => {
+      tab.classList.toggle('active', tab.dataset.step == stepNum);
+    });
+    sheetSteps.forEach(step => {
+      step.classList.toggle('active-step', step.dataset.step == stepNum);
+    });
+  }
+
+  sheetTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      goToSheetStep(tab.dataset.step);
+    });
+  });
+
+  document.querySelectorAll('.sheet-next').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const currentStep = document.querySelector('.sheet-step.active-step');
+      const currentNum = parseInt(currentStep.dataset.step);
+      if (currentNum < 5) goToSheetStep(currentNum + 1);
+    });
+  });
+
+  document.querySelectorAll('.sheet-prev').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const currentStep = document.querySelector('.sheet-step.active-step');
+      const currentNum = parseInt(currentStep.dataset.step);
+      if (currentNum > 1) goToSheetStep(currentNum - 1);
+    });
+  });
+
+  attrInputs.forEach((input, index) => {
+    input.addEventListener('input', () => {
+      let val = parseInt(input.value) || 0;
+      const currentExtra = val;
+      usedPoints = calculateUsedPoints();
+
+      if (val > MAX_ATTR_VALUE) {
+        showPopup(`Limite máximo atingido! O limite para esta etapa é ${MAX_ATTR_VALUE} pontos por atributo.`);
+        input.value = MAX_ATTR_VALUE;
+        val = MAX_ATTR_VALUE;
+      }
+
+      if (val < 0) {
+        input.value = 0;
+        val = 0;
+      }
+
+      const remaining = TOTAL_POINTS - calculateUsedPoints();
+      if (remaining < 0) {
+        const maxExtra = remaining + currentExtra;
+        showPopup(`Pontos insuficientes! Você possui apenas ${maxExtra >= 0 ? maxExtra : 0} pontos restantes.`);
+        input.value = Math.min(maxExtra, MAX_ATTR_VALUE);
+        if (input.value < 0) input.value = 0;
+      }
+
+      usedPoints = calculateUsedPoints();
+      updatePointsDisplay();
+
+      if (attrBars[index]) {
+        attrBars[index].style.width = (val / MAX_ATTR_VALUE * 100) + '%';
+      }
+    });
+  });
+
+  if (btnNextAttr) {
+    btnNextAttr.addEventListener('click', () => {
+      const remaining = TOTAL_POINTS - calculateUsedPoints();
+      if (remaining > 0) {
+        showPopup(`Você ainda tem ${remaining} ponto${remaining > 1 ? 's' : ''} para distribuir!`);
+        return;
+      }
+      const currentStep = document.querySelector('.sheet-step.active-step');
+      const currentNum = parseInt(currentStep.dataset.step);
+      if (currentNum < 5) goToSheetStep(currentNum + 1);
+    });
+  }
+
+  if (btnBackToAgents) {
+    btnBackToAgents.addEventListener('click', () => {
+      const agentsLink = document.querySelector('a[data-target="agents"]');
+      if (agentsLink) agentsLink.click();
+    });
+  }
+
+  function saveAgentSheet() {
+    const agentData = {
+      attributes: {
+        agi: document.getElementById('attr-agi')?.value || 10,
+        for: document.getElementById('attr-for')?.value || 10,
+        int: document.getElementById('attr-int')?.value || 10,
+        pre: document.getElementById('attr-pre')?.value || 10,
+        vig: document.getElementById('attr-vig')?.value || 10,
+      },
+      origin: document.querySelector('input[name="origin"]:checked')?.value || '',
+      class: document.querySelector('input[name="class"]:checked')?.value || '',
+      org: document.querySelector('input[name="org"]:checked')?.value || '',
+      character: {
+        name: document.getElementById('char-name')?.value || '',
+        playerName: document.getElementById('player-name')?.value || '',
+        history: document.getElementById('char-history')?.value || '',
+      },
+      createdAt: new Date().toISOString()
+    };
+
+    const agents = JSON.parse(localStorage.getItem('todo_agents') || '[]');
+    agents.push(agentData);
+    localStorage.setItem('todo_agents', JSON.stringify(agents));
+
+    return agentData;
+  }
+
+  if (btnSaveSheet) {
+    btnSaveSheet.addEventListener('click', () => {
+      saveAgentSheet();
+      btnSaveSheet.innerHTML = '<i class="fas fa-check"></i> Salvo!';
+      setTimeout(() => {
+        btnSaveSheet.innerHTML = '<i class="fas fa-save"></i> Salvar Ficha';
+      }, 1500);
+    });
+  }
+
+  if (btnFinishSheet) {
+    btnFinishSheet.addEventListener('click', () => {
+      const charName = document.getElementById('char-name')?.value.trim();
+      const playerName = document.getElementById('player-name')?.value.trim();
+
+      if (!charName || !playerName) {
+        showPopup('Por favor, preencha o nome do personagem e do jogador.');
+        return;
+      }
+
+      saveAgentSheet();
+
+      const agentsLink = document.querySelector('a[data-target="agents"]');
+      if (agentsLink) agentsLink.click();
+
+      if (counterEl) {
+        agentCount = parseInt(localStorage.getItem('todo_agent_count') || '0');
+        agentCount++;
+        localStorage.setItem('todo_agent_count', agentCount);
+        counterEl.innerText = `Agentes: ${agentCount}/${maxAgents}`;
+        if (emptyStateEl) emptyStateEl.style.display = 'none';
+        updateGlobalStats();
+        renderAgentCards();
+      }
+    });
+  }
 
   // --- STATS GLOBALS ---
   const globalAgentEl = document.getElementById('global-agent-count');
@@ -592,7 +806,7 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
       </div>
       <div class="dash-card-footer">
-        <button class="btn btn-primary btn-sm">Acessar Ficha</button>
+        <button class="btn btn-primary btn-sm btn-access-sheet">Acessar Ficha</button>
       </div>
     `;
 
@@ -602,14 +816,52 @@ document.addEventListener('DOMContentLoaded', () => {
       updateCounterSystem();
     });
 
+    card.querySelector('.btn-access-sheet').addEventListener('click', () => {
+      const sheetLink = document.querySelector('a[data-target="sheet"]');
+      if (sheetLink) sheetLink.click();
+    });
+
     if (gridContainer && emptyStateEl) gridContainer.insertBefore(card, emptyStateEl);
   }
 
   function handleCreateAgent() {
-    if (agentCount >= maxAgents) return alert("Lotação Máxima! Você já tem 30 agentes.");
-    agentCount++;
-    createAgentDOM();
-    updateCounterSystem();
+    tabSections.forEach(s => s.classList.remove('active-tab'));
+    if (sheetSection) sheetSection.classList.add('active-tab');
+    
+    resetSheetForm();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // Reset sheet form when entering sheet section
+  function resetSheetForm() {
+    attrInputs.forEach((input, index) => {
+      input.value = 0;
+      if (attrBars[index]) {
+        attrBars[index].style.width = '0%';
+      }
+    });
+    usedPoints = calculateUsedPoints();
+    updatePointsDisplay();
+    
+    document.querySelectorAll('input[name="origin"]').forEach(el => el.checked = false);
+    document.querySelectorAll('input[name="class"]').forEach(el => el.checked = false);
+    document.querySelectorAll('input[name="org"]').forEach(el => el.checked = false);
+    document.getElementById('char-name').value = '';
+    document.getElementById('player-name').value = '';
+    document.getElementById('char-history').value = '';
+    
+    goToSheetStep(1);
+  }
+
+  if (sheetSection) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          resetSheetForm();
+        }
+      });
+    }, { threshold: 0.5 });
+    observer.observe(sheetSection);
   }
 
   if (btnTopCreate) btnTopCreate.addEventListener('click', handleCreateAgent);
@@ -668,7 +920,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function handleCreateCamp() {
-    if (campCount >= maxCamps) return alert("Limite Atingido! Máximo de 10 Campanhas.");
+    if (campCount >= maxCamps) return showPopup("Limite Atingido! Máximo de 10 Campanhas.");
     campCount++;
     createCampDOM();
     updateCampCounter();
@@ -1049,7 +1301,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (btnFinishLogin && nameInput) {
     btnFinishLogin.addEventListener('click', () => {
       const pName = nameInput.value.trim();
-      if (!pName) return alert('Por favor, informe seu Codenome de Agente.');
+      if (!pName) return showPopup('Por favor, informe seu Codenome de Agente.');
       localStorage.setItem('todo_user_name', pName);
       nameInput.value = '';
       checkLoginState();

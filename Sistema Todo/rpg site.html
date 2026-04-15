@@ -28,6 +28,19 @@
   <div class="noise-overlay" aria-hidden="true"></div>
 
   <!-- ============================================================
+       CUSTOM POPUP NOTIFICATION
+  ============================================================ -->
+  <div id="custom-popup" class="custom-popup" aria-hidden="true">
+    <div class="popup-overlay"></div>
+    <div class="popup-content">
+      <div class="popup-icon"><i class="fas fa-exclamation-triangle"></i></div>
+      <h3 class="popup-title">Aviso</h3>
+      <p class="popup-message"></p>
+      <button class="btn btn-primary popup-close">Entendido</button>
+    </div>
+  </div>
+
+  <!-- ============================================================
        HEADER / NAV
   ============================================================ -->
   <header id="site-header" role="banner">
@@ -815,7 +828,324 @@
     </div> <!-- END COMMUNITY HOME WRAPPER -->
 
     <!-- ============================================================
-         LOGIN SECTION
+          AGENT SHEET SECTION (CREATE/EDIT)
+    ============================================================ -->
+    <section id="sheet-section" class="section-darker tab-section" data-tab="sheet" aria-labelledby="sheet-heading" style="min-height: 100vh;">
+      <div class="container">
+        <header class="sheet-header">
+          <button id="btn-back-to-agents" class="btn btn-outline btn-sm">
+            <i class="fas fa-arrow-left"></i> Voltar
+          </button>
+          <h2 id="sheet-heading">Nova Ficha de Agente</h2>
+          <div class="sheet-actions">
+            <button id="btn-save-sheet" class="btn btn-primary">
+              <i class="fas fa-save"></i> Salvar Ficha
+            </button>
+          </div>
+        </header>
+
+        <div class="sheet-wizard">
+          <div class="sheet-tabs">
+            <button class="sheet-tab active" data-step="1">
+              <span class="sheet-tab-num">1</span>
+              <span class="sheet-tab-label">Atributos</span>
+            </button>
+            <button class="sheet-tab" data-step="2">
+              <span class="sheet-tab-num">2</span>
+              <span class="sheet-tab-label">Origem</span>
+            </button>
+            <button class="sheet-tab" data-step="3">
+              <span class="sheet-tab-num">3</span>
+              <span class="sheet-tab-label">Classe</span>
+            </button>
+            <button class="sheet-tab" data-step="4">
+              <span class="sheet-tab-num">4</span>
+              <span class="sheet-tab-label">Organização</span>
+            </button>
+            <button class="sheet-tab" data-step="5">
+              <span class="sheet-tab-num">5</span>
+              <span class="sheet-tab-label">Dados</span>
+            </button>
+          </div>
+
+          <div class="sheet-content">
+            <!-- Step 1: Atributos -->
+            <div class="sheet-step active-step" data-step="1">
+              <div class="sheet-step-header">
+                <i class="fas fa-dice-d20"></i>
+                <h3>Atributos</h3>
+                <p>Defina os atributos base do seu personagem equivalente a NEX 5% ou nível 1. Você possui <span id="points-remaining" class="points-display">9</span> pontos para distribuir.</p>
+                <small class="attr-limit-note">Limite máximo: 3 pontos por atributo nesta etapa</small>
+              </div>
+              <div class="attributes-grid">
+                <div class="attr-input-group">
+                  <label for="attr-agi">
+                    <i class="fas fa-bolt"></i> AGI (Agilidade)
+                  </label>
+                  <input type="number" id="attr-agi" min="0" max="3" value="0" class="attr-input" data-base="0" />
+                  <div class="attr-bar-container">
+                    <div class="attr-bar-fill" style="width: 0%"></div>
+                  </div>
+                </div>
+                <div class="attr-input-group">
+                  <label for="attr-for">
+                    <i class="fas fa-fist-raised"></i> FOR (Força)
+                  </label>
+                  <input type="number" id="attr-for" min="0" max="3" value="0" class="attr-input" data-base="0" />
+                  <div class="attr-bar-container">
+                    <div class="attr-bar-fill" style="width: 0%"></div>
+                  </div>
+                </div>
+                <div class="attr-input-group">
+                  <label for="attr-int">
+                    <i class="fas fa-brain"></i> INT (Inteligência)
+                  </label>
+                  <input type="number" id="attr-int" min="0" max="3" value="0" class="attr-input" data-base="0" />
+                  <div class="attr-bar-container">
+                    <div class="attr-bar-fill" style="width: 0%"></div>
+                  </div>
+                </div>
+                <div class="attr-input-group">
+                  <label for="attr-pre">
+                    <i class="fas fa-eye"></i> PRE (Presença)
+                  </label>
+                  <input type="number" id="attr-pre" min="0" max="3" value="0" class="attr-input" data-base="0" />
+                  <div class="attr-bar-container">
+                    <div class="attr-bar-fill" style="width: 0%"></div>
+                  </div>
+                </div>
+                <div class="attr-input-group">
+                  <label for="attr-vig">
+                    <i class="fas fa-heart"></i> VIG (Vigor)
+                  </label>
+                  <input type="number" id="attr-vig" min="0" max="3" value="0" class="attr-input" data-base="0" />
+                  <div class="attr-bar-container">
+                    <div class="attr-bar-fill" style="width: 0%"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="sheet-step-actions">
+                <button class="btn btn-primary sheet-next" id="btn-next-attr">Próximo <i class="fas fa-arrow-right"></i></button>
+              </div>
+            </div>
+
+            <!-- Step 2: Origem/Ocupação -->
+            <div class="sheet-step" data-step="2">
+              <div class="sheet-step-header">
+                <i class="fas fa-briefcase"></i>
+                <h3>Origem / Ocupação</h3>
+                <p>Qual era a ocupação do seu agente antes de entrar para a Ordem?</p>
+              </div>
+              <div class="origin-grid">
+                <label class="origin-card">
+                  <input type="radio" name="origin" value="cientista" />
+                  <div class="origin-card-inner">
+                    <i class="fas fa-flask"></i>
+                    <span>Cientista</span>
+                  </div>
+                </label>
+                <label class="origin-card">
+                  <input type="radio" name="origin" value="medico" />
+                  <div class="origin-card-inner">
+                    <i class="fas fa-user-md"></i>
+                    <span>Médico</span>
+                  </div>
+                </label>
+                <label class="origin-card">
+                  <input type="radio" name="origin" value="policial" />
+                  <div class="origin-card-inner">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Policial</span>
+                  </div>
+                </label>
+                <label class="origin-card">
+                  <input type="radio" name="origin" value="detetive" />
+                  <div class="origin-card-inner">
+                    <i class="fas fa-search"></i>
+                    <span>Detetive</span>
+                  </div>
+                </label>
+                <label class="origin-card">
+                  <input type="radio" name="origin" value="militar" />
+                  <div class="origin-card-inner">
+                    <i class="fas fa-crosshairs"></i>
+                    <span>Militar</span>
+                  </div>
+                </label>
+                <label class="origin-card">
+                  <input type="radio" name="origin" value="jornalista" />
+                  <div class="origin-card-inner">
+                    <i class="fas fa-newspaper"></i>
+                    <span>Jornalista</span>
+                  </div>
+                </label>
+                <label class="origin-card">
+                  <input type="radio" name="origin" value="estudante" />
+                  <div class="origin-card-inner">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>Estudante</span>
+                  </div>
+                </label>
+                <label class="origin-card">
+                  <input type="radio" name="origin" value="ocultista" />
+                  <div class="origin-card-inner">
+                    <i class="fas fa-moon"></i>
+                    <span>Ocultista</span>
+                  </div>
+                </label>
+              </div>
+              <div class="sheet-step-actions">
+                <button class="btn btn-outline sheet-prev"><i class="fas fa-arrow-left"></i> Anterior</button>
+                <button class="btn btn-primary sheet-next">Próximo <i class="fas fa-arrow-right"></i></button>
+              </div>
+            </div>
+
+            <!-- Step 3: Classe -->
+            <div class="sheet-step" data-step="3">
+              <div class="sheet-step-header">
+                <i class="fas fa-user-tag"></i>
+                <h3>Classe</h3>
+                <p>Qual é a classe do seu agente?</p>
+              </div>
+              <div class="class-grid">
+                <label class="class-card">
+                  <input type="radio" name="class" value="combatente" />
+                  <div class="class-card-inner">
+                    <i class="fas fa-fist-raised"></i>
+                    <span>Combatente</span>
+                    <small>Especialista em combate e sobrevivência</small>
+                  </div>
+                </label>
+                <label class="class-card">
+                  <input type="radio" name="class" value="ocultista" />
+                  <div class="class-card-inner">
+                    <i class="fas fa-magic"></i>
+                    <span>Ocultista</span>
+                    <small>Mestre dos rituais e poderes arcanos</small>
+                  </div>
+                </label>
+                <label class="class-card">
+                  <input type="radio" name="class" value="investigador" />
+                  <div class="class-card-inner">
+                    <i class="fas fa-search-plus"></i>
+                    <span>Investigador</span>
+                    <small>Expert em descobrir a verdade oculta</small>
+                  </div>
+                </label>
+                <label class="class-card">
+                  <input type="radio" name="class" value="medico" />
+                  <div class="class-card-inner">
+                    <i class="fas fa-first-aid"></i>
+                    <span>Médico do abyss</span>
+                    <small>Especialista em cura e sanidade</small>
+                  </div>
+                </label>
+                <label class="class-card">
+                  <input type="radio" name="class" value="tecnico" />
+                  <div class="class-card-inner">
+                    <i class="fas fa-laptop-code"></i>
+                    <span>Técnico</span>
+                    <small>Especialista em tecnologia e gadgets</small>
+                  </div>
+                </label>
+                <label class="class-card">
+                  <input type="radio" name="class" value="diplomata" />
+                  <div class="class-card-inner">
+                    <i class="fas fa-handshake"></i>
+                    <span>Diplomata</span>
+                    <small>Expert em negociação e socialização</small>
+                  </div>
+                </label>
+              </div>
+              <div class="sheet-step-actions">
+                <button class="btn btn-outline sheet-prev"><i class="fas fa-arrow-left"></i> Anterior</button>
+                <button class="btn btn-primary sheet-next">Próximo <i class="fas fa-arrow-right"></i></button>
+              </div>
+            </div>
+
+            <!-- Step 4: Organização -->
+            <div class="sheet-step" data-step="4">
+              <div class="sheet-step-header">
+                <i class="fas fa-users"></i>
+                <h3>Organização</h3>
+                <p>Para qual organização seu agente trabalha?</p>
+              </div>
+              <div class="org-grid">
+                <label class="org-card">
+                  <input type="radio" name="org" value="ordem" />
+                  <div class="org-card-inner">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Ordem Paranormal</span>
+                    <small>A organização principal</small>
+                  </div>
+                </label>
+                <label class="org-card">
+                  <input type="radio" name="org" value="delta" />
+                  <div class="org-card-inner">
+                    <i class="fas fa-triangle-exclamation"></i>
+                    <span>Delta Verde</span>
+                    <small>Forças especiais</small>
+                  </div>
+                </label>
+                <label class="org-card">
+                  <input type="radio" name="org" value="lambda" />
+                  <div class="org-card-inner">
+                    <i class="fas fa-flask"></i>
+                    <span>Lambda</span>
+                    <small>Divisão científica</small>
+                  </div>
+                </label>
+                <label class="org-card">
+                  <input type="radio" name="org" value="independent" />
+                  <div class="org-card-inner">
+                    <i class="fas fa-question-circle"></i>
+                    <span>自由 Agente Livre</span>
+                    <small>Sem afiliação oficial</small>
+                  </div>
+                </label>
+              </div>
+              <div class="sheet-step-actions">
+                <button class="btn btn-outline sheet-prev"><i class="fas fa-arrow-left"></i> Anterior</button>
+                <button class="btn btn-primary sheet-next">Próximo <i class="fas fa-arrow-right"></i></button>
+              </div>
+            </div>
+
+            <!-- Step 5: Dados do Personagem -->
+            <div class="sheet-step" data-step="5">
+              <div class="sheet-step-header">
+                <i class="fas fa-id-card"></i>
+                <h3>Dados do Personagem</h3>
+                <p>Preencha as informações pessoais do seu agente</p>
+              </div>
+              <div class="character-data-form">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="char-name">Nome do Personagem *</label>
+                    <input type="text" id="char-name" placeholder="Ex: João Silva" maxlength="50" />
+                  </div>
+                  <div class="form-group">
+                    <label for="player-name">Nome do Jogador *</label>
+                    <input type="text" id="player-name" placeholder="Ex: Carlos Santos" maxlength="50" />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="char-history">História do Personagem</label>
+                  <textarea id="char-history" placeholder="Conte a história do seu agente... Como ele entrou para a Ordem? Qual foi seu primeiro encontro sobrenatural?" maxlength="1000" rows="6"></textarea>
+                </div>
+              </div>
+              <div class="sheet-step-actions">
+                <button class="btn btn-outline sheet-prev"><i class="fas fa-arrow-left"></i> Anterior</button>
+                <button class="btn btn-primary" id="btn-finish-sheet">Finalizar Ficha <i class="fas fa-check"></i></button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+          LOGIN SECTION
     ============================================================ -->
     <section id="login-section" class="section-darker tab-section" data-tab="login" aria-labelledby="login-heading"
       style="min-height: 100vh; align-items: center; justify-content: center;">
