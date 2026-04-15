@@ -2831,7 +2831,80 @@ button {
   max-width: 200px;
 }
 
-/* ── Nav Profile Dropdown ───────────────────────────────────── */
+/* ── Agents/Campaigns Login Wall ─────────────────────────────── */
+.agents-login-wall,
+.campaigns-login-wall {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  padding: 3.5rem 2rem;
+  text-align: center;
+  background: var(--color-bg-3);
+  border: 1px solid rgba(196, 30, 58, 0.2);
+  border-radius: var(--radius-lg);
+  box-shadow:
+    0 0 60px rgba(196, 30, 58, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  position: relative;
+  overflow: hidden;
+}
+
+.agents-login-wall::before,
+.campaigns-login-wall::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px;
+  height: 200px;
+  background: radial-gradient(ellipse, rgba(196, 30, 58, 0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.agents-login-wall .alw-icon,
+.campaigns-login-wall .alw-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(196, 30, 58, 0.12);
+  border: 1px solid rgba(196, 30, 58, 0.3);
+  display: grid;
+  place-items: center;
+  font-size: 1.5rem;
+  color: var(--color-red-light);
+  box-shadow: 0 0 24px rgba(196, 30, 58, 0.2);
+  animation: lock-pulse-red 3s ease-in-out infinite;
+}
+
+@keyframes lock-pulse-red {
+  0%, 100% {
+    box-shadow: 0 0 24px rgba(196, 30, 58, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(196, 30, 58, 0.4);
+  }
+}
+
+.agents-login-wall h4,
+.campaigns-login-wall h4 {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  color: var(--color-text);
+  font-weight: 700;
+}
+
+.agents-login-wall p,
+.campaigns-login-wall p {
+  font-size: 0.9rem;
+  color: var(--color-text-2);
+  line-height: 1.7;
+  max-width: 420px;
+}
+
+/* Nav Profile Dropdown ───────────────────────────────────── */
 .nav-user-panel {
   position: relative;
   display: flex;

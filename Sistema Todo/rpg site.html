@@ -333,18 +333,42 @@
 
     </div> <!-- END HOME WRAPPER -->
 
-    <!-- ============================================================
-         AGENTS SECTION
+<!-- ============================================================
+          AGENTS SECTION
     ============================================================ -->
     <section id="agents-section" class="section-darker tab-section" data-tab="agents" aria-labelledby="agents-heading">
       <div class="container">
+        <header class="section-header">
+          <div class="section-tag">
+            <i class="fas fa-user-secret" aria-hidden="true"></i>
+            Agentes
+          </div>
+          <h2 id="agents-heading" class="section-title">
+            Seus personagens<br /><em>e companheiros</em>
+          </h2>
+          <p class="section-desc">
+            Agentes são os personagens que os jogadores interpretam nas campanhas de RPG. Cada agente possui atributos,
+            habilidades, origens e equipamentos únicos. Crie seu agente e prepare-se para enfrentar o desconhecido ao lado
+            de outros membros da Ordem.
+          </p>
+        </header>
+
         <div class="dashboard-wrapper">
           <header class="dashboard-header">
             <h3 id="agente-counter">Agentes: 0/30</h3>
             <button class="btn btn-primary" id="btn-top-create-agent">Novo Agente</button>
           </header>
 
-          <div class="agent-dashboard-grid" id="agents-grid-container">
+          <div id="agents-login-wall" class="agents-login-wall" style="display: none;">
+            <div class="alw-icon"><i class="fas fa-user-secret"></i></div>
+            <h4>Acesso Restrito</h4>
+            <p>Apenas agentes identificados pela Ordem podem criar e gerenciar personagens.<br/>Informe seu codenome para acessar o painel.</p>
+            <a href="#login" class="btn btn-primary tab-link" data-target="login">
+              <i class="fas fa-sign-in-alt"></i> Identificar-se
+            </a>
+          </div>
+
+          <div class="agent-dashboard-grid" id="agents-grid-container" style="display: none;">
 
             <!-- Botão Gigante de Adicionar Novo Agente (Empty State) -->
             <div id="agent-empty-state" class="agent-dash-card empty-state"
@@ -710,20 +734,44 @@
       </div>
     </section>
 
-    <!-- ============================================================
-         CAMPAIGN SECTION
+<!-- ============================================================
+          CAMPAIGN SECTION
     ============================================================ -->
     <section id="campaign-section" class="section-campaign tab-section" data-tab="campaigns"
       aria-labelledby="campaign-heading">
       <div class="campaign-bg-grid" aria-hidden="true"></div>
       <div class="container">
+        <header class="section-header">
+          <div class="section-tag">
+            <i class="fas fa-dungeon" aria-hidden="true"></i>
+            Campanhas
+          </div>
+          <h2 id="campaign-heading" class="section-title">
+            Suas histórias<br /><em>e investigações</em>
+          </h2>
+          <p class="section-desc">
+            Campanhas são os cenários onde os agentes interpretam seus personagens. Cada campanha inclui locais, NPCs, mistérios,
+            monstrosidades e arcos de história creados pelo Mestre. Como Mestre, você cria a narrativa e conduz os jogadores através
+            de sessões de investigação paranormal.
+          </p>
+        </header>
+
         <div class="dashboard-wrapper">
           <header class="dashboard-header">
             <h3 id="campaign-counter">Campanhas: 0/10</h3>
             <button class="btn btn-primary" id="btn-top-create-campaign">Nova Campanha</button>
           </header>
 
-          <div class="agent-dashboard-grid" id="campaigns-grid-container">
+          <div id="campaigns-login-wall" class="campaigns-login-wall" style="display: none;">
+            <div class="alw-icon"><i class="fas fa-book-open"></i></div>
+            <h4>Autorização Requerida</h4>
+            <p>Para criar e gerenciar campanhas, você precisa ter autorização de Mestre.<br/>Faça login para acessar o painel de mestre.</p>
+            <a href="#login" class="btn btn-primary tab-link" data-target="login">
+              <i class="fas fa-sign-in-alt"></i> Autorizar-se
+            </a>
+          </div>
+
+          <div class="agent-dashboard-grid" id="campaigns-grid-container" style="display: none;">
             <!-- Empty State de Campanhas -->
             <div id="campaign-empty-state" class="agent-dash-card empty-state"
               style="align-items: center; justify-content: center; text-align: center; border-style: dashed; padding: 3rem 1.5rem; cursor: pointer;">

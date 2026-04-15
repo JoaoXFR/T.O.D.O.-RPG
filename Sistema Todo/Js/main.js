@@ -825,6 +825,14 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function handleCreateAgent() {
+    const userName = localStorage.getItem('todo_user_name');
+    if (!userName) {
+      const loginLink = document.querySelector('a[data-target="login"]');
+      if (loginLink) loginLink.click();
+      showPopup('Você precisa estar identificado para criar um agente.');
+      return;
+    }
+
     tabSections.forEach(s => s.classList.remove('active-tab'));
     if (sheetSection) sheetSection.classList.add('active-tab');
     
@@ -920,6 +928,14 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function handleCreateCamp() {
+    const userName = localStorage.getItem('todo_user_name');
+    if (!userName) {
+      const loginLink = document.querySelector('a[data-target="login"]');
+      if (loginLink) loginLink.click();
+      showPopup('Você precisa estar identificado para criar uma campanha.');
+      return;
+    }
+
     if (campCount >= maxCamps) return showPopup("Limite Atingido! Máximo de 10 Campanhas.");
     campCount++;
     createCampDOM();
@@ -936,6 +952,18 @@ document.addEventListener('DOMContentLoaded', () => {
   const communityEmpty   = document.getElementById('community-bestiary-empty');
   const agentNameLabel   = document.getElementById('bestiary-agent-name');
   const btnSubmitThreat  = document.getElementById('btn-submit-threat');
+
+  // --- AGENTS LOGIN WALL ---
+  const agentsLoginWall = document.getElementById('agents-login-wall');
+  const agentsGridContainer = document.getElementById('agents-grid-container');
+  const btnTopCreateAgent = document.getElementById('btn-top-create-agent');
+  const btnCenterCreateAgent = document.getElementById('btn-center-create-agent');
+
+  // --- CAMPAIGNS LOGIN WALL ---
+  const campaignsLoginWall = document.getElementById('campaigns-login-wall');
+  const campaignsGridContainer = document.getElementById('campaigns-grid-container');
+  const btnTopCreateCamp = document.getElementById('btn-top-create-campaign');
+  const btnCenterCreateCamp = document.getElementById('btn-center-create-campaign');
 
   const THREAT_ICONS = [
     'fas fa-ghost', 'fas fa-skull', 'fas fa-spider', 'fas fa-eye',
@@ -1052,6 +1080,24 @@ document.addEventListener('DOMContentLoaded', () => {
       if (communityGrid) communityGrid.innerHTML = '';
       if (communityEmpty) communityEmpty.style.display = 'none';
     }
+  }
+
+  // --- REFRESH AGENTS & CAMPAIGNS FOR USER (LOGIN WALL) ---
+  function refreshAgentsAndCampaignsForUser() {
+    const userName = localStorage.getItem('todo_user_name');
+    const isLoggedIn = !!userName;
+
+    // Agents Login Wall
+    if (agentsLoginWall) agentsLoginWall.style.display = isLoggedIn ? 'none' : 'flex';
+    if (agentsGridContainer) agentsGridContainer.style.display = isLoggedIn ? 'grid' : 'none';
+    if (btnTopCreateAgent) btnTopCreateAgent.style.display = isLoggedIn ? '' : 'none';
+    if (btnCenterCreateAgent) btnCenterCreateAgent.style.display = isLoggedIn ? '' : 'none';
+
+    // Campaigns Login Wall
+    if (campaignsLoginWall) campaignsLoginWall.style.display = isLoggedIn ? 'none' : 'flex';
+    if (campaignsGridContainer) campaignsGridContainer.style.display = isLoggedIn ? 'grid' : 'none';
+    if (btnTopCreateCamp) btnTopCreateCamp.style.display = isLoggedIn ? '' : 'none';
+    if (btnCenterCreateCamp) btnCenterCreateCamp.style.display = isLoggedIn ? '' : 'none';
   }
 
   // Submit handler
@@ -1276,6 +1322,7 @@ document.addEventListener('DOMContentLoaded', () => {
     localStorage.removeItem('todo_user_name');
     checkLoginState();
     refreshBestiaryForUser();
+    refreshAgentsAndCampaignsForUser();
     // Return to home
     const homeLink = document.querySelector('a[data-target="home"]');
     if (homeLink) homeLink.click();
@@ -1306,6 +1353,7 @@ document.addEventListener('DOMContentLoaded', () => {
       nameInput.value = '';
       checkLoginState();
       refreshBestiaryForUser();
+      refreshAgentsAndCampaignsForUser();
       const homeLink = document.querySelector('a[data-target="home"]');
       if (homeLink) homeLink.click();
     });
@@ -1317,5 +1365,6 @@ document.addEventListener('DOMContentLoaded', () => {
   renderCamps();
   saveAndRenderPosts();
   refreshBestiaryForUser(); // show login-wall OR user's threats depending on session
+  refreshAgentsAndCampaignsForUser();
   checkLoginState();
 });
