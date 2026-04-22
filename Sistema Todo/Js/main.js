@@ -702,7 +702,15 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const agents = JSON.parse(localStorage.getItem('todo_agents') || '[]');
-    agents.push(agentData);
+    const activeIndex = sessionStorage.getItem('todo_active_agent_index');
+    
+    if (activeIndex !== null && activeIndex !== '') {
+      agentData.createdAt = agents[activeIndex]?.createdAt || agentData.createdAt;
+      agents[activeIndex] = agentData;
+    } else {
+      agents.push(agentData);
+    }
+    
     localStorage.setItem('todo_agents', JSON.stringify(agents));
 
     return agentData;
@@ -775,8 +783,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function renderAgentCards() {
     document.querySelectorAll('.app-created-agent').forEach(el => el.remove());
-    for (let i = 0; i < agentCount; i++) {
-      createAgentDOM();
+    const agents = JSON.parse(localStorage.getItem('todo_agents') || '[]');
+    agentCount = agents.length;
+    localStorage.setItem('todo_agent_count', agentCount);
+    for (let i = 0; i < agents.length; i++) {
+      createAgentDOM(agents[i], i);
     }
     updateCounterSystem();
   }
@@ -788,10 +799,16 @@ document.addEventListener('DOMContentLoaded', () => {
     updateGlobalStats();
   }
 
-  function createAgentDOM() {
+  function createAgentDOM(agentData, index) {
     const card = document.createElement('div');
     card.className = 'agent-dash-card app-created-agent';
-    const dateStr = new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: '2-digit' });
+    
+    const agentName = agentData?.character?.name || 'Novo Agente';
+    const agentClass = agentData?.class || 'Recruta';
+    let dateStr = new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: '2-digit' });
+    if (agentData?.createdAt) {
+      dateStr = new Date(agentData.createdAt).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: '2-digit' });
+    }
 
     card.innerHTML = `
       <button class="agent-dash-settings btn-remove-agent" aria-label="Remover Agente">
@@ -800,8 +817,8 @@ document.addEventListener('DOMContentLoaded', () => {
       <div class="dash-card-content">
         <div class="dash-card-avatar empty"><i class="fas fa-user-secret"></i></div>
         <div class="dash-card-info">
-          <h4>Novo Agente</h4>
-          <span class="dash-card-class">Recruta</span>
+          <h4>${agentName}</h4>
+          <span class="dash-card-class">${agentClass}</span>
           <span class="dash-card-date">Criado em ${dateStr}</span>
         </div>
       </div>
@@ -811,14 +828,23 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
 
     card.querySelector('.btn-remove-agent').addEventListener('click', () => {
-      card.remove();
-      agentCount--;
-      updateCounterSystem();
+      const agents = JSON.parse(localStorage.getItem('todo_agents') || '[]');
+      agents.splice(index, 1);
+      localStorage.setItem('todo_agents', JSON.stringify(agents));
+      renderAgentCards();
     });
 
     card.querySelector('.btn-access-sheet').addEventListener('click', () => {
-      const sheetLink = document.querySelector('a[data-target="sheet"]');
-      if (sheetLink) sheetLink.click();
+      sessionStorage.setItem('todo_active_agent_index', index);
+      
+      const allTabs = document.querySelectorAll('.tab-section');
+      allTabs.forEach(s => s.classList.remove('active-tab'));
+      const viewSection = document.getElementById('view-sheet-section');
+      if (viewSection) viewSection.classList.add('active-tab');
+
+      document.querySelectorAll('.tab-link').forEach(l => l.classList.remove('active-nav'));
+      
+      populateVisualSheet(agentData);
     });
 
     if (gridContainer && emptyStateEl) gridContainer.insertBefore(card, emptyStateEl);
@@ -833,6 +859,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
+    sessionStorage.removeItem('todo_active_agent_index');
     tabSections.forEach(s => s.classList.remove('active-tab'));
     if (sheetSection) sheetSection.classList.add('active-tab');
     
@@ -855,17 +882,244 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('input[name="class"]').forEach(el => el.checked = false);
     document.querySelectorAll('input[name="org"]').forEach(el => el.checked = false);
     document.getElementById('char-name').value = '';
-    document.getElementById('player-name').value = '';
+    document.getElementById('player-name').value = localStorage.getItem('todo_user_name') || '';
     document.getElementById('char-history').value = '';
     
     goToSheetStep(1);
   }
 
+  function loadSheetForm(agentData) {
+    document.querySelectorAll('input[name="origin"]').forEach(el => el.checked = false);
+    document.querySelectorAll('input[name="class"]').forEach(el => el.checked = false);
+    document.querySelectorAll('input[name="org"]').forEach(el => el.checked = false);
+
+    ['agi', 'for', 'int', 'pre', 'vig'].forEach((attr, idx) => {
+      const val = parseInt(agentData.attributes?.[attr]) || 0;
+      const input = document.getElementById('attr-' + attr);
+      if (input) input.value = val;
+      if (attrBars[idx]) attrBars[idx].style.width = (val / MAX_ATTR_VALUE * 100) + '%';
+    });
+    
+    usedPoints = calculateUsedPoints();
+    updatePointsDisplay();
+    
+    ['origin', 'class', 'org'].forEach(group => {
+      const val = agentData[group];
+      if (val) {
+        const rb = document.querySelector('input[name="' + group + '"][value="' + val + '"]');
+        if (rb) rb.checked = true;
+      }
+    });
+
+    const charNameEl = document.getElementById('char-name');
+    const playerNameEl = document.getElementById('player-name');
+    const charHistoryEl = document.getElementById('char-history');
+    if (charNameEl) charNameEl.value = agentData.character?.name || '';
+    if (playerNameEl) playerNameEl.value = agentData.character?.playerName || '';
+    if (charHistoryEl) charHistoryEl.value = agentData.character?.history || '';
+
+    goToSheetStep(1);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+
+  const btnBackFromVisual = document.getElementById('btn-back-from-visual');
+  const btnEditSheetData = document.getElementById('btn-edit-sheet-data');
+  if (btnBackFromVisual) {
+    btnBackFromVisual.addEventListener('click', () => {
+      const agentsLink = document.querySelector('a[data-target="agents"]');
+      if (agentsLink) agentsLink.click();
+    });
+  }
+  
+  
+  // --- INLINE EDIT LOGIC --- //
+  let isEditingSheet = false;
+  const sheetContainer = document.querySelector('.ordem-sheet');
+
+  const modalSelector = document.getElementById('vs-selector-modal');
+  const btnCloseModal = document.getElementById('btn-close-vs-modal');
+  const modalGrid = document.getElementById('vs-modal-grid');
+  const modalTitle = document.getElementById('vs-modal-title');
+
+  let currentSelectorTarget = null; // 'origin' or 'class'
+
+  const optionsDic = {
+    origin: [
+      { id: 'cientista', icon: 'fa-flask', text: 'Cientista' },
+      { id: 'medico', icon: 'fa-user-md', text: 'Médico' },
+      { id: 'policial', icon: 'fa-shield-alt', text: 'Policial' },
+      { id: 'detetive', icon: 'fa-search', text: 'Detetive' },
+      { id: 'militar', icon: 'fa-crosshairs', text: 'Militar' },
+      { id: 'jornalista', icon: 'fa-newspaper', text: 'Jornalista' },
+      { id: 'estudante', icon: 'fa-graduation-cap', text: 'Estudante' },
+      { id: 'ocultista', icon: 'fa-moon', text: 'Ocultista' }
+    ],
+    class: [
+      { id: 'combatente', icon: 'fa-fist-raised', text: 'Combatente' },
+      { id: 'ocultista', icon: 'fa-magic', text: 'Ocultista' },
+      { id: 'investigador', icon: 'fa-search-plus', text: 'Investigador' },
+      { id: 'medico', icon: 'fa-first-aid', text: 'Médico do abyss' },
+      { id: 'tecnico', icon: 'fa-laptop-code', text: 'Técnico' },
+      { id: 'diplomata', icon: 'fa-handshake', text: 'Diplomata' }
+    ]
+  };
+
+  if (btnCloseModal) {
+    btnCloseModal.addEventListener('click', () => { modalSelector.style.display = 'none'; });
+  }
+
+  function openSelectorModal(type) {
+    if(!isEditingSheet) return;
+    currentSelectorTarget = type;
+    modalTitle.textContent = type === 'origin' ? 'Selecione sua Origem' : 'Selecione sua Classe';
+    modalGrid.innerHTML = '';
+    
+    optionsDic[type].forEach(opt => {
+      const card = document.createElement('div');
+      card.className = 'vs-opt-card';
+      card.innerHTML = `<i class="fas ${opt.icon}"></i><span>${opt.text}</span>`;
+      card.addEventListener('click', () => {
+        document.getElementById(type === 'origin' ? 'vs-char-origin' : 'vs-char-class').textContent = opt.text;
+        document.getElementById(type === 'origin' ? 'vs-char-origin' : 'vs-char-class').dataset.val = opt.id;
+        modalSelector.style.display = 'none';
+      });
+      modalGrid.appendChild(card);
+    });
+
+    modalSelector.style.display = 'flex';
+  }
+
+  const trigOrigin = document.getElementById('vs-char-origin');
+  if(trigOrigin) trigOrigin.addEventListener('click', () => openSelectorModal('origin'));
+  
+  const trigClass = document.getElementById('vs-char-class');
+  if(trigClass) trigClass.addEventListener('click', () => openSelectorModal('class'));
+
+  if (btnEditSheetData) {
+    btnEditSheetData.addEventListener('click', () => {
+      // Toggle edit mode
+      isEditingSheet = !isEditingSheet;
+      const inputs = document.querySelectorAll('.op-input, .attr-input');
+
+      if (isEditingSheet) {
+        // TURN ON EDIT MODE
+        sheetContainer.classList.add('is-editing');
+        btnEditSheetData.innerHTML = '<i class="fas fa-save"></i> Salvar Dados';
+        btnEditSheetData.classList.replace('btn-outline', 'btn-primary');
+        
+        inputs.forEach(ip => ip.removeAttribute('readonly'));
+
+      } else {
+        // TURN OFF EDIT MODE AND SAVE
+        sheetContainer.classList.remove('is-editing');
+        btnEditSheetData.innerHTML = '<i class="fas fa-edit"></i> Editar Dados';
+        btnEditSheetData.classList.replace('btn-primary', 'btn-outline');
+        
+        inputs.forEach(ip => ip.setAttribute('readonly', 'true'));
+
+        // SAVE DATA TO LOCAL STORAGE
+        const index = sessionStorage.getItem('todo_active_agent_index');
+        let agents = JSON.parse(localStorage.getItem('todo_agents') || '[]');
+        if (index !== null && agents[index]) {
+           const active = agents[index];
+           
+           // Update basic character info
+           if(!active.character) active.character = {};
+           active.character.name = document.getElementById('vs-char-name')?.value || '';
+           active.character.playerName = document.getElementById('vs-player-name')?.value || '';
+
+           // Update dropdown info (using dataset or falling back to lowercase)
+           const origEl = document.getElementById('vs-char-origin');
+           const classEl = document.getElementById('vs-char-class');
+           if(origEl) active.origin = origEl.dataset.val || origEl.textContent.trim().toLowerCase();
+           if(classEl) active.class = classEl.dataset.val || classEl.textContent.trim().toLowerCase();
+
+           // Update attributes
+           if(!active.attributes) active.attributes = {};
+           ['agi', 'for', 'int', 'pre', 'vig'].forEach(attr => {
+              active.attributes[attr] = parseInt(document.getElementById('vs-attr-' + attr)?.value) || 0;
+           });
+
+           // Save array back
+           agents[index] = active;
+           localStorage.setItem('todo_agents', JSON.stringify(agents));
+
+           // Optionally update total points visually if needed
+        }
+      }
+    });
+  }
+
+
+  function capitalizeFirstLetter(string) {
+    if (!string) return '';
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
+  function populateVisualSheet(data) {
+    if(!data) return;
+    
+    // Header setup
+    document.getElementById('vs-char-name').value = data.character?.name || '';
+    document.getElementById('vs-char-origin').textContent = capitalizeFirstLetter(data.origin) || 'Mundano';
+    document.getElementById('vs-player-name').value = data.character?.playerName || '';
+    document.getElementById('vs-char-class').textContent = capitalizeFirstLetter(data.class) || 'Mundano';
+    
+    // Attributes handling
+    const agi = data.attributes?.agi || 0;
+    const force = data.attributes?.for || 0;
+    const intel = data.attributes?.int || 0;
+    const pre = data.attributes?.pre || 0;
+    const vig = data.attributes?.vig || 0;
+
+    document.getElementById('vs-attr-agi').value = agi;
+    document.getElementById('vs-attr-for').value = force;
+    document.getElementById('vs-attr-int').value = intel;
+    document.getElementById('vs-attr-pre').value = pre;
+    document.getElementById('vs-attr-vig').value = vig;
+
+    // Hardcode Skills visual representation for now
+    const skillsList = [
+      "Acrobacia+", "Adestramento*", "Artes*", "Atletismo", "Atualidades", "Ciências*",
+      "Crime*+", "Diplomacia", "Enganação", "Fortitude", "Furtividade+", "Iniciativa",
+      "Intimidação", "Intuição", "Investigação", "Luta", "Medicina", "Ocultismo*",
+      "Percepção", "Pilotagem*", "Pontaria", "Profissão*", "Reflexos", "Religião*",
+      "Sobrevivência", "Tática*", "Tecnologia*", "Vontade"
+    ];
+
+    const container = document.getElementById('vs-skills-container');
+    if (container) {
+      container.innerHTML = '';
+      skillsList.forEach(sk => {
+        // Find attr string associated (e.g. AGI, INT) roughly for visual
+        let attrG = "INT";
+        if (["Acrobacia+", "Crime*+", "Furtividade+", "Iniciativa", "Pilotagem*", "Pontaria", "Reflexos"].includes(sk)) attrG = "AGI";
+        if (["Atletismo", "Luta"].includes(sk)) attrG = "FOR";
+        if (["Adestramento*", "Artes*", "Diplomacia", "Enganação", "Intimidação", "Intuição", "Percepção", "Religião*", "Vontade"].includes(sk)) attrG = "PRE";
+        if (["Fortitude"].includes(sk)) attrG = "VIG";
+
+        container.innerHTML += `
+          <div class="skills-row">
+            <div class="skill-name-col"><i class="fas fa-dice-d20"></i> ${sk}</div>
+            <div class="skill-dice-col">( ${attrG} )</div>
+            <div class="skill-bonus-col">( 0 )</div>
+            <div class="skill-train-col"><span class="s-val">0</span></div>
+            <div class="skill-oth-col"><span class="s-val">0</span></div>
+          </div>
+        `;
+      });
+    }
+  }
+
+
   if (sheetSection) {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          resetSheetForm();
+          if (!sessionStorage.getItem('todo_active_agent_index')) {
+            resetSheetForm();
+          }
         }
       });
     }, { threshold: 0.5 });
