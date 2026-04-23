@@ -703,14 +703,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const agents = JSON.parse(localStorage.getItem('todo_agents') || '[]');
     const activeIndex = sessionStorage.getItem('todo_active_agent_index');
-    
+
     if (activeIndex !== null && activeIndex !== '') {
       agentData.createdAt = agents[activeIndex]?.createdAt || agentData.createdAt;
       agents[activeIndex] = agentData;
     } else {
       agents.push(agentData);
     }
-    
+
     localStorage.setItem('todo_agents', JSON.stringify(agents));
 
     return agentData;
@@ -802,7 +802,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function createAgentDOM(agentData, index) {
     const card = document.createElement('div');
     card.className = 'agent-dash-card app-created-agent';
-    
+
     const agentName = agentData?.character?.name || 'Novo Agente';
     const agentClass = agentData?.class || 'Recruta';
     let dateStr = new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: '2-digit' });
@@ -836,14 +836,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     card.querySelector('.btn-access-sheet').addEventListener('click', () => {
       sessionStorage.setItem('todo_active_agent_index', index);
-      
+
       const allTabs = document.querySelectorAll('.tab-section');
       allTabs.forEach(s => s.classList.remove('active-tab'));
       const viewSection = document.getElementById('view-sheet-section');
       if (viewSection) viewSection.classList.add('active-tab');
 
       document.querySelectorAll('.tab-link').forEach(l => l.classList.remove('active-nav'));
-      
+
       populateVisualSheet(agentData);
     });
 
@@ -862,7 +862,7 @@ document.addEventListener('DOMContentLoaded', () => {
     sessionStorage.removeItem('todo_active_agent_index');
     tabSections.forEach(s => s.classList.remove('active-tab'));
     if (sheetSection) sheetSection.classList.add('active-tab');
-    
+
     resetSheetForm();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
@@ -877,14 +877,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     usedPoints = calculateUsedPoints();
     updatePointsDisplay();
-    
+
     document.querySelectorAll('input[name="origin"]').forEach(el => el.checked = false);
     document.querySelectorAll('input[name="class"]').forEach(el => el.checked = false);
     document.querySelectorAll('input[name="org"]').forEach(el => el.checked = false);
     document.getElementById('char-name').value = '';
     document.getElementById('player-name').value = localStorage.getItem('todo_user_name') || '';
     document.getElementById('char-history').value = '';
-    
+
     goToSheetStep(1);
   }
 
@@ -899,10 +899,10 @@ document.addEventListener('DOMContentLoaded', () => {
       if (input) input.value = val;
       if (attrBars[idx]) attrBars[idx].style.width = (val / MAX_ATTR_VALUE * 100) + '%';
     });
-    
+
     usedPoints = calculateUsedPoints();
     updatePointsDisplay();
-    
+
     ['origin', 'class', 'org'].forEach(group => {
       const val = agentData[group];
       if (val) {
@@ -931,8 +931,8 @@ document.addEventListener('DOMContentLoaded', () => {
       if (agentsLink) agentsLink.click();
     });
   }
-  
-  
+
+
   // --- INLINE EDIT LOGIC --- //
   let isEditingSheet = false;
   const sheetContainer = document.querySelector('.ordem-sheet');
@@ -970,11 +970,11 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function openSelectorModal(type) {
-    if(!isEditingSheet) return;
+    if (!isEditingSheet) return;
     currentSelectorTarget = type;
     modalTitle.textContent = type === 'origin' ? 'Selecione sua Origem' : 'Selecione sua Classe';
     modalGrid.innerHTML = '';
-    
+
     optionsDic[type].forEach(opt => {
       const card = document.createElement('div');
       card.className = 'vs-opt-card';
@@ -991,10 +991,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const trigOrigin = document.getElementById('vs-char-origin');
-  if(trigOrigin) trigOrigin.addEventListener('click', () => openSelectorModal('origin'));
-  
+  if (trigOrigin) trigOrigin.addEventListener('click', () => openSelectorModal('origin'));
+
   const trigClass = document.getElementById('vs-char-class');
-  if(trigClass) trigClass.addEventListener('click', () => openSelectorModal('class'));
+  if (trigClass) trigClass.addEventListener('click', () => openSelectorModal('class'));
 
   if (btnEditSheetData) {
     btnEditSheetData.addEventListener('click', () => {
@@ -1007,7 +1007,7 @@ document.addEventListener('DOMContentLoaded', () => {
         sheetContainer.classList.add('is-editing');
         btnEditSheetData.innerHTML = '<i class="fas fa-save"></i> Salvar Dados';
         btnEditSheetData.classList.replace('btn-outline', 'btn-primary');
-        
+
         inputs.forEach(ip => ip.removeAttribute('readonly'));
 
       } else {
@@ -1015,37 +1015,37 @@ document.addEventListener('DOMContentLoaded', () => {
         sheetContainer.classList.remove('is-editing');
         btnEditSheetData.innerHTML = '<i class="fas fa-edit"></i> Editar Dados';
         btnEditSheetData.classList.replace('btn-primary', 'btn-outline');
-        
+
         inputs.forEach(ip => ip.setAttribute('readonly', 'true'));
 
         // SAVE DATA TO LOCAL STORAGE
         const index = sessionStorage.getItem('todo_active_agent_index');
         let agents = JSON.parse(localStorage.getItem('todo_agents') || '[]');
         if (index !== null && agents[index]) {
-           const active = agents[index];
-           
-           // Update basic character info
-           if(!active.character) active.character = {};
-           active.character.name = document.getElementById('vs-char-name')?.value || '';
-           active.character.playerName = document.getElementById('vs-player-name')?.value || '';
+          const active = agents[index];
 
-           // Update dropdown info (using dataset or falling back to lowercase)
-           const origEl = document.getElementById('vs-char-origin');
-           const classEl = document.getElementById('vs-char-class');
-           if(origEl) active.origin = origEl.dataset.val || origEl.textContent.trim().toLowerCase();
-           if(classEl) active.class = classEl.dataset.val || classEl.textContent.trim().toLowerCase();
+          // Update basic character info
+          if (!active.character) active.character = {};
+          active.character.name = document.getElementById('vs-char-name')?.value || '';
+          active.character.playerName = document.getElementById('vs-player-name')?.value || '';
 
-           // Update attributes
-           if(!active.attributes) active.attributes = {};
-           ['agi', 'for', 'int', 'pre', 'vig'].forEach(attr => {
-              active.attributes[attr] = parseInt(document.getElementById('vs-attr-' + attr)?.value) || 0;
-           });
+          // Update dropdown info (using dataset or falling back to lowercase)
+          const origEl = document.getElementById('vs-char-origin');
+          const classEl = document.getElementById('vs-char-class');
+          if (origEl) active.origin = origEl.dataset.val || origEl.textContent.trim().toLowerCase();
+          if (classEl) active.class = classEl.dataset.val || classEl.textContent.trim().toLowerCase();
 
-           // Save array back
-           agents[index] = active;
-           localStorage.setItem('todo_agents', JSON.stringify(agents));
+          // Update attributes
+          if (!active.attributes) active.attributes = {};
+          ['agi', 'for', 'int', 'pre', 'vig'].forEach(attr => {
+            active.attributes[attr] = parseInt(document.getElementById('vs-attr-' + attr)?.value) || 0;
+          });
 
-           // Optionally update total points visually if needed
+          // Save array back
+          agents[index] = active;
+          localStorage.setItem('todo_agents', JSON.stringify(agents));
+
+          // Optionally update total points visually if needed
         }
       }
     });
@@ -1058,14 +1058,14 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function populateVisualSheet(data) {
-    if(!data) return;
-    
+    if (!data) return;
+
     // Header setup
     document.getElementById('vs-char-name').value = data.character?.name || '';
     document.getElementById('vs-char-origin').textContent = capitalizeFirstLetter(data.origin) || 'Mundano';
     document.getElementById('vs-player-name').value = data.character?.playerName || '';
     document.getElementById('vs-char-class').textContent = capitalizeFirstLetter(data.class) || 'Mundano';
-    
+
     // Attributes handling
     const agi = data.attributes?.agi || 0;
     const force = data.attributes?.for || 0;
@@ -1078,6 +1078,13 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('vs-attr-int').value = intel;
     document.getElementById('vs-attr-pre').value = pre;
     document.getElementById('vs-attr-vig').value = vig;
+
+    // NEX
+    const nexBtn = document.getElementById('vs-nex');
+    if (nexBtn) {
+      const savedNex = data.nex || '0%';
+      nexBtn.childNodes[0].textContent = savedNex + ' ';
+    }
 
     // Hardcode Skills visual representation for now
     const skillsList = [
@@ -1112,6 +1119,252 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+
+  // ── DICE ROLL MODAL ─────────────────────────────────────────
+  const diceModal      = document.getElementById('dice-roll-modal');
+  const diceAttrGrid   = document.getElementById('dice-attr-grid');
+  const diceStepChoose = document.getElementById('dice-step-choose');
+  const diceStepResult = document.getElementById('dice-step-result');
+  const diceD20Value   = document.getElementById('dice-d20-value');
+  const diceFormula    = document.getElementById('dice-result-formula');
+  const diceStatus     = document.getElementById('dice-result-status');
+  const diceResultBox  = document.getElementById('dice-result-d20');
+  const btnOpenDice    = document.getElementById('btn-open-dice-roll');
+  const btnCloseDice   = document.getElementById('btn-close-dice-modal');
+  const btnDiceReroll  = document.getElementById('btn-dice-reroll');
+  const btnDiceChangeAttr = document.getElementById('btn-dice-change-attr');
+
+  let lastRollAttr = null;
+  let lastRollVal = null;
+
+  const DICE_ATTRS = [
+    { key: 'agi', abbr: 'AGI', name: 'Agilidade' },
+    { key: 'for', abbr: 'FOR', name: 'Força'     },
+    { key: 'int', abbr: 'INT', name: 'Intelecto'  },
+    { key: 'pre', abbr: 'PRE', name: 'Presença'   },
+    { key: 'vig', abbr: 'VIG', name: 'Vigor'      },
+  ];
+
+  // Only critical extremes get a label; everything else is silent
+  const ROLL_OUTCOMES = [
+    { min: 1,  max: 1,  label: '💀 Falha Crítica!',   cls: 'status-critical-fail'   },
+    { min: 20, max: 20, label: '⭐ Sucesso Crítico!',  cls: 'status-critical-success' },
+  ];
+
+  function getOutcome(total) {
+    return ROLL_OUTCOMES.find(o => total >= o.min && total <= o.max) || null;
+  }
+
+  function openDiceModal() {
+    if (!diceModal) return;
+
+    lastRollAttr = null;
+    lastRollVal = null;
+
+    // Read current attribute values from the visual sheet
+    diceAttrGrid.innerHTML = '';
+    DICE_ATTRS.forEach(attr => {
+      const rawVal = parseInt(document.getElementById('vs-attr-' + attr.key)?.value) || 0;
+
+      // Describe the dice mechanic for this attribute value
+      let diceDesc;
+      if (rawVal === 0)      diceDesc = '2d20 — pior';
+      else if (rawVal === 1) diceDesc = '1d20';
+      else                   diceDesc = `${rawVal}d20 — melhor`;
+
+      const card = document.createElement('button');
+      card.className = 'dice-attr-card';
+      card.setAttribute('type', 'button');
+      card.innerHTML = `
+        <span class="dac-abbr">${attr.abbr}</span>
+        <span class="dac-val">${rawVal}</span>
+        <span class="dac-name">${attr.name}</span>
+        <span class="dac-bonus">${diceDesc}</span>
+      `;
+      card.addEventListener('click', () => performRoll(attr.abbr, rawVal));
+      diceAttrGrid.appendChild(card);
+    });
+
+    // Show step 1
+    diceStepChoose.style.display = 'block';
+    diceStepResult.style.display = 'none';
+
+    diceModal.classList.add('show');
+    diceModal.setAttribute('aria-hidden', 'false');
+  }
+
+  function closeDiceModal() {
+    if (!diceModal) return;
+    diceModal.classList.remove('show');
+    diceModal.setAttribute('aria-hidden', 'true');
+  }
+
+  function rollD20() { return Math.floor(Math.random() * 20) + 1; }
+
+  function performRoll(attrAbbr, attrVal) {
+    lastRollAttr = attrAbbr;
+    lastRollVal = attrVal;
+
+    // ── Ordem Paranormal dice rule ──────────────────────────────
+    // 0  → rola 2d20, pega o pior (desvantagem)
+    // 1  → rola 1d20
+    // 2+ → rola attrVal d20s, pega o melhor (vantagem)
+    let rolls = [];
+    let chosen, mode;
+
+    if (attrVal === 0) {
+      rolls = [rollD20(), rollD20()];
+      chosen = Math.min(...rolls);          // worst
+      mode = 'desvantagem';
+    } else if (attrVal === 1) {
+      rolls = [rollD20()];
+      chosen = rolls[0];
+      mode = 'normal';
+    } else {
+      for (let i = 0; i < attrVal; i++) rolls.push(rollD20());
+      chosen = Math.max(...rolls);          // best
+      mode = 'vantagem';
+    }
+
+    const outcome = getOutcome(chosen);
+
+    // Switch to result step
+    diceStepChoose.style.display = 'none';
+    diceStepResult.style.display = 'block';
+
+    // Animate — scramble numbers then reveal
+    diceResultBox.classList.remove('rolling');
+    void diceResultBox.offsetWidth;
+    diceResultBox.classList.add('rolling');
+
+    diceD20Value.textContent = '?';
+    let ticks = 0;
+    const scramble = setInterval(() => {
+      diceD20Value.textContent = Math.floor(Math.random() * 20) + 1;
+      ticks++;
+      if (ticks >= 8) {
+        clearInterval(scramble);
+        diceD20Value.textContent = chosen;
+
+        // Build formula: show all rolls, highlight chosen
+        const diceStr = rolls
+          .map(r => r === chosen
+            ? `<strong>${r}</strong>`
+            : `<span style="opacity:.5">${r}</span>`)
+          .join(' · ');
+        const modeLabel = attrVal === 0
+          ? `<span style="color:var(--color-red-light);font-size:0.8em">(${rolls.length}d20 — pior)</span>`
+          : attrVal === 1
+            ? `<span style="color:var(--color-text-3);font-size:0.8em">(1d20)</span>`
+            : `<span style="color:#4ade80;font-size:0.8em">(${rolls.length}d20 — melhor)</span>`;
+
+        diceFormula.innerHTML = `${attrAbbr} ${modeLabel}<br>${diceStr} → <strong>${chosen}</strong>`;
+        // Only show status badge on critical extremes
+        if (outcome) {
+          diceStatus.textContent = outcome.label;
+          diceStatus.className = 'dice-result-status ' + outcome.cls;
+          diceStatus.style.display = '';
+        } else {
+          diceStatus.textContent = '';
+          diceStatus.style.display = 'none';
+        }
+      }
+    }, 60);
+  }
+
+  if (btnOpenDice) btnOpenDice.addEventListener('click', openDiceModal);
+  if (btnCloseDice) btnCloseDice.addEventListener('click', closeDiceModal);
+  if (btnDiceReroll) {
+    btnDiceReroll.addEventListener('click', () => {
+      if (lastRollAttr && lastRollVal !== null) {
+        performRoll(lastRollAttr, lastRollVal);
+      }
+    });
+  }
+  if (btnDiceChangeAttr) {
+    btnDiceChangeAttr.innerHTML = '<i class="fas fa-exchange-alt"></i> Escolher Outro Atributo';
+    btnDiceChangeAttr.addEventListener('click', () => {
+      diceStepChoose.style.display = 'block';
+      diceStepResult.style.display = 'none';
+    });
+  }
+
+  // Close on overlay click
+  if (diceModal) {
+    diceModal.addEventListener('click', (e) => {
+      if (e.target === diceModal) closeDiceModal();
+    });
+  }
+
+  // Close on Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && diceModal?.classList.contains('show')) closeDiceModal();
+  });
+  // ── END DICE ROLL MODAL ──────────────────────────────────────
+
+  // ── NEX SELECTOR ─────────────────────────────────────────────
+  const nexBtn      = document.getElementById('vs-nex');
+  const nexDropdown = document.getElementById('nex-dropdown');
+
+  // Build values: 0, 5, 10, ..., 95, 99
+  const NEX_VALUES = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50,
+                      55, 60, 65, 70, 75, 80, 85, 90, 95, 99];
+
+  if (nexBtn && nexDropdown) {
+    // Render options once
+    nexDropdown.innerHTML = NEX_VALUES.map(v =>
+      `<button class="nex-option" type="button" data-val="${v}%" role="option">${v}%</button>`
+    ).join('');
+
+    function openNexDropdown() {
+      nexDropdown.classList.add('open');
+      nexBtn.setAttribute('aria-expanded', 'true');
+      nexDropdown.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeNexDropdown() {
+      nexDropdown.classList.remove('open');
+      nexBtn.setAttribute('aria-expanded', 'false');
+      nexDropdown.setAttribute('aria-hidden', 'true');
+    }
+
+    nexBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      nexDropdown.classList.contains('open') ? closeNexDropdown() : openNexDropdown();
+    });
+
+    nexDropdown.addEventListener('click', (e) => {
+      const opt = e.target.closest('.nex-option');
+      if (!opt) return;
+      const val = opt.dataset.val;
+
+      // Update button text (keep the chevron icon)
+      nexBtn.childNodes[0].textContent = val + ' ';
+
+      // Highlight active option
+      nexDropdown.querySelectorAll('.nex-option').forEach(o =>
+        o.classList.toggle('active', o.dataset.val === val)
+      );
+
+      // Persist to agent data
+      const idx = sessionStorage.getItem('todo_active_agent_index');
+      if (idx !== null && idx !== '') {
+        const agents = JSON.parse(localStorage.getItem('todo_agents') || '[]');
+        if (agents[idx]) {
+          agents[idx].nex = val;
+          localStorage.setItem('todo_agents', JSON.stringify(agents));
+        }
+      }
+
+      closeNexDropdown();
+    });
+
+    // Close on outside click
+    document.addEventListener('click', (e) => {
+      if (!nexBtn.closest('#nex-trigger-box').contains(e.target)) closeNexDropdown();
+    });
+  }
+  // ── END NEX SELECTOR ─────────────────────────────────────────
 
   if (sheetSection) {
     const observer = new IntersectionObserver((entries) => {
@@ -1201,11 +1454,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- BESTIARY ENGINE ---
   const communityContent = document.getElementById('bestiary-community-content');
-  const loginWall        = document.getElementById('bestiary-login-wall');
-  const communityGrid    = document.getElementById('community-bestiary-grid');
-  const communityEmpty   = document.getElementById('community-bestiary-empty');
-  const agentNameLabel   = document.getElementById('bestiary-agent-name');
-  const btnSubmitThreat  = document.getElementById('btn-submit-threat');
+  const loginWall = document.getElementById('bestiary-login-wall');
+  const communityGrid = document.getElementById('community-bestiary-grid');
+  const communityEmpty = document.getElementById('community-bestiary-empty');
+  const agentNameLabel = document.getElementById('bestiary-agent-name');
+  const btnSubmitThreat = document.getElementById('btn-submit-threat');
 
   // --- AGENTS LOGIN WALL ---
   const agentsLoginWall = document.getElementById('agents-login-wall');
@@ -1260,9 +1513,9 @@ document.addEventListener('DOMContentLoaded', () => {
       card.className = 'bestiary-card community-card';
       card.setAttribute('role', 'listitem');
 
-      const icon     = THREAT_ICONS[index % THREAT_ICONS.length];
+      const icon = THREAT_ICONS[index % THREAT_ICONS.length];
       const lvlClass = getThreatLevelClass(threat.level);
-      const naLabel  = threat.level ? `N.A. ${threat.level}` : 'N.A. ?';
+      const naLabel = threat.level ? `N.A. ${threat.level}` : 'N.A. ?';
 
       card.innerHTML = `
         <button class="bestiary-delete-btn" aria-label="Remover ameaça">
@@ -1322,7 +1575,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const userName = localStorage.getItem('todo_user_name');
     const isLoggedIn = !!userName;
 
-    if (loginWall)        loginWall.style.display        = isLoggedIn ? 'none' : 'flex';
+    if (loginWall) loginWall.style.display = isLoggedIn ? 'none' : 'flex';
     if (communityContent) communityContent.style.display = isLoggedIn ? 'block' : 'none';
 
     if (isLoggedIn) {
@@ -1360,12 +1613,12 @@ document.addEventListener('DOMContentLoaded', () => {
       const key = getUserBestiaryKey();
       if (!key) return; // safety guard
 
-      const nameEl  = document.getElementById('bthreat-name');
-      const typeEl  = document.getElementById('bthreat-type');
-      const descEl  = document.getElementById('bthreat-desc');
-      const pvEl    = document.getElementById('bthreat-pv');
-      const defEl   = document.getElementById('bthreat-def');
-      const sanEl   = document.getElementById('bthreat-san');
+      const nameEl = document.getElementById('bthreat-name');
+      const typeEl = document.getElementById('bthreat-type');
+      const descEl = document.getElementById('bthreat-desc');
+      const pvEl = document.getElementById('bthreat-pv');
+      const defEl = document.getElementById('bthreat-def');
+      const sanEl = document.getElementById('bthreat-san');
       const levelEl = document.getElementById('bthreat-level');
 
       const name = nameEl?.value.trim();
@@ -1377,29 +1630,29 @@ document.addEventListener('DOMContentLoaded', () => {
         [nameEl, typeEl, descEl].forEach(el => {
           if (el && !el.value.trim()) {
             el.style.borderColor = 'var(--color-red-light)';
-            el.style.boxShadow   = '0 0 8px var(--color-red-glow)';
+            el.style.boxShadow = '0 0 8px var(--color-red-glow)';
             setTimeout(() => { el.style.borderColor = ''; el.style.boxShadow = ''; }, 2500);
           }
         });
         return;
       }
 
-      const author   = localStorage.getItem('todo_user_name') || 'Agente Anônimo';
-      const now      = new Date();
-      const dateStr  = now.toLocaleDateString('pt-BR') + ' '
-                     + now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+      const author = localStorage.getItem('todo_user_name') || 'Agente Anônimo';
+      const now = new Date();
+      const dateStr = now.toLocaleDateString('pt-BR') + ' '
+        + now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
 
       const threats = JSON.parse(localStorage.getItem(key) || '[]');
       threats.unshift({
         name,
         type,
         desc,
-        pv:     pvEl?.value.trim()  || '',
-        def:    defEl?.value.trim() || '',
-        san:    sanEl?.value.trim() || '',
-        level:  levelEl?.value      || '',
+        pv: pvEl?.value.trim() || '',
+        def: defEl?.value.trim() || '',
+        san: sanEl?.value.trim() || '',
+        level: levelEl?.value || '',
         author,
-        date:   dateStr
+        date: dateStr
       });
       localStorage.setItem(key, JSON.stringify(threats));
 
@@ -1485,23 +1738,23 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // --- LOGIN ENGINE ---
-  const btnGoogleLogin   = document.getElementById('btn-google-login');
-  const step1            = document.getElementById('login-step-1');
-  const step2            = document.getElementById('login-step-2');
-  const step3            = document.getElementById('login-step-3');
-  const btnFinishLogin   = document.getElementById('btn-finish-login');
-  const nameInput        = document.getElementById('new-agent-name-input');
-  const step3NameEl      = document.getElementById('login-step3-name');
+  const btnGoogleLogin = document.getElementById('btn-google-login');
+  const step1 = document.getElementById('login-step-1');
+  const step2 = document.getElementById('login-step-2');
+  const step3 = document.getElementById('login-step-3');
+  const btnFinishLogin = document.getElementById('btn-finish-login');
+  const nameInput = document.getElementById('new-agent-name-input');
+  const step3NameEl = document.getElementById('login-step3-name');
 
   // Nav elements
-  const navBtnEnter      = document.getElementById('nav-btn-enter');
-  const navUserPanel     = document.getElementById('nav-user-panel');
-  const navUserNameBtn   = document.getElementById('nav-user-name-btn');
-  const navProfileBtn    = document.getElementById('nav-profile-btn');
-  const navProfileDrop   = document.getElementById('nav-profile-dropdown');
-  const npdAgentName     = document.getElementById('npd-agent-name');
-  const btnNavLogout     = document.getElementById('btn-nav-logout');
-  const mobileLoginItem  = document.getElementById('mobile-login-item');
+  const navBtnEnter = document.getElementById('nav-btn-enter');
+  const navUserPanel = document.getElementById('nav-user-panel');
+  const navUserNameBtn = document.getElementById('nav-user-name-btn');
+  const navProfileBtn = document.getElementById('nav-profile-btn');
+  const navProfileDrop = document.getElementById('nav-profile-dropdown');
+  const npdAgentName = document.getElementById('npd-agent-name');
+  const btnNavLogout = document.getElementById('btn-nav-logout');
+  const mobileLoginItem = document.getElementById('mobile-login-item');
 
   // ── Profile dropdown toggle ──────────────────────────────
   if (navProfileBtn && navProfileDrop) {
@@ -1537,10 +1790,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (savedName) {
       // Nav: hide "Entrar", show profile button
-      if (navBtnEnter)    navBtnEnter.style.display  = 'none';
-      if (navUserPanel)   navUserPanel.style.display  = 'flex';
-      if (navUserNameBtn) navUserNameBtn.textContent  = savedName;
-      if (npdAgentName)   npdAgentName.textContent    = savedName;
+      if (navBtnEnter) navBtnEnter.style.display = 'none';
+      if (navUserPanel) navUserPanel.style.display = 'flex';
+      if (navUserNameBtn) navUserNameBtn.textContent = savedName;
+      if (npdAgentName) npdAgentName.textContent = savedName;
 
       // Mobile menu: show login link to take user to step-3
       if (mobileLoginItem) mobileLoginItem.style.display = 'block';
@@ -1553,8 +1806,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     } else {
       // Nav: show "Entrar", hide profile button
-      if (navBtnEnter)  navBtnEnter.style.display  = '';
-      if (navUserPanel) navUserPanel.style.display  = 'none';
+      if (navBtnEnter) navBtnEnter.style.display = '';
+      if (navUserPanel) navUserPanel.style.display = 'none';
 
       // Mobile menu
       if (mobileLoginItem) mobileLoginItem.style.display = 'block';

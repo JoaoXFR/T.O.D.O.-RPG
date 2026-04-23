@@ -1308,6 +1308,50 @@
 
 
     <!-- ============================================================
+          DICE ROLL MODAL — Attribute Selector
+    ============================================================ -->
+    <div id="dice-roll-modal" class="dice-modal-overlay" aria-hidden="true">
+      <div class="dice-modal-box" role="dialog" aria-modal="true" aria-labelledby="dice-modal-title">
+        <div class="dice-modal-header">
+          <div class="dice-modal-title-row">
+            <i class="fas fa-dice-d20 dice-modal-icon"></i>
+            <h3 id="dice-modal-title">Rolagem de Atributo</h3>
+          </div>
+          <button id="btn-close-dice-modal" class="btn-modal-close" aria-label="Fechar"><i
+              class="fas fa-times"></i></button>
+        </div>
+
+        <!-- Step 1: Choose attribute -->
+        <div id="dice-step-choose" class="dice-modal-body">
+          <p class="dice-modal-hint">Selecione o atributo para rolar <strong>1d20 + bônus</strong></p>
+          <div class="dice-attr-grid" id="dice-attr-grid">
+            <!-- rendered by JS -->
+          </div>
+        </div>
+
+        <!-- Step 2: Roll result -->
+        <div id="dice-step-result" class="dice-modal-body" style="display:none;">
+          <div class="dice-result-area">
+            <div class="dice-result-d20" id="dice-result-d20">
+              <i class="fas fa-dice-d20"></i>
+              <span id="dice-d20-value">–</span>
+            </div>
+            <div class="dice-result-formula" id="dice-result-formula">1d20 + 0 = –</div>
+            <div class="dice-result-status" id="dice-result-status"></div>
+          </div>
+          <div class="dice-result-actions">
+            <button class="btn btn-primary btn-sm" id="btn-dice-reroll">
+              <i class="fas fa-redo"></i> Rolar Novamente
+            </button>
+            <button class="btn btn-outline btn-sm" id="btn-dice-change-attr">
+              <i class="fas fa-exchange-alt"></i> Outro Atributo
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
           NEW VISUAL SHEET SECTION
     ============================================================ -->
     <section id="view-sheet-section" class="section-darker tab-section" data-tab="view-sheet"
@@ -1318,7 +1362,9 @@
             <i class="fas fa-arrow-left"></i> Voltar
           </button>
           <div class="sheet-actions">
-            <!-- Emptiness or Edit actions later -->
+            <button class="btn btn-outline btn-sm" id="btn-open-dice-roll">
+              <i class="fas fa-dice-d20"></i> Rolar Dado
+            </button>
             <button class="btn btn-outline btn-sm" id="btn-edit-sheet-data">
               <i class="fas fa-edit"></i> Editar Dados
             </button>
@@ -1509,6 +1555,21 @@
         </div>
       </div>
     </section>
+
+    <!-- ============================================================
+         SELECTOR MODAL (VS)
+    ============================================================ -->
+    <div id="vs-selector-modal" class="vs-modal-backdrop" aria-hidden="true" style="display: none;">
+      <div class="vs-modal-content">
+        <div class="vs-modal-header">
+          <h3 id="vs-modal-title">Selecionar</h3>
+          <button id="btn-close-vs-modal" class="btn-modal-close" aria-label="Fechar">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div id="vs-modal-grid" class="vs-options-grid"></div>
+      </div>
+    </div>
   </main>
 
   <!-- ============================================================
