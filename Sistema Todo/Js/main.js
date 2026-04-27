@@ -682,13 +682,16 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function saveAgentSheet() {
+    // Helper: remove leading zeros
+    const stripLeadingZeros = (val) => String(val).replace(/^0+/, '') || '0';
+    
     const agentData = {
       attributes: {
-        agi: document.getElementById('attr-agi')?.value || 10,
-        for: document.getElementById('attr-for')?.value || 10,
-        int: document.getElementById('attr-int')?.value || 10,
-        pre: document.getElementById('attr-pre')?.value || 10,
-        vig: document.getElementById('attr-vig')?.value || 10,
+        agi: stripLeadingZeros(document.getElementById('attr-agi')?.value || 0),
+        for: stripLeadingZeros(document.getElementById('attr-for')?.value || 0),
+        int: stripLeadingZeros(document.getElementById('attr-int')?.value || 0),
+        pre: stripLeadingZeros(document.getElementById('attr-pre')?.value || 0),
+        vig: stripLeadingZeros(document.getElementById('attr-vig')?.value || 0),
       },
       origin: document.querySelector('input[name="origin"]:checked')?.value || '',
       class: document.querySelector('input[name="class"]:checked')?.value || '',
@@ -893,8 +896,12 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('input[name="class"]').forEach(el => el.checked = false);
     document.querySelectorAll('input[name="org"]').forEach(el => el.checked = false);
 
+    // Helper: remove leading zeros
+    const stripLeadingZeros = (val) => String(val).replace(/^0+/, '') || '0';
+
     ['agi', 'for', 'int', 'pre', 'vig'].forEach((attr, idx) => {
-      const val = parseInt(agentData.attributes?.[attr]) || 0;
+      const rawVal = agentData.attributes?.[attr] || 0;
+      const val = stripLeadingZeros(rawVal);
       const input = document.getElementById('attr-' + attr);
       if (input) input.value = val;
       if (attrBars[idx]) attrBars[idx].style.width = (val / MAX_ATTR_VALUE * 100) + '%';
@@ -1060,18 +1067,21 @@ document.addEventListener('DOMContentLoaded', () => {
   function populateVisualSheet(data) {
     if (!data) return;
 
+    // Helper: remove leading zeros
+    const stripLeadingZeros = (val) => String(val).replace(/^0+/, '') || '0';
+
     // Header setup
     document.getElementById('vs-char-name').value = data.character?.name || '';
     document.getElementById('vs-char-origin').textContent = capitalizeFirstLetter(data.origin) || 'Mundano';
     document.getElementById('vs-player-name').value = data.character?.playerName || '';
     document.getElementById('vs-char-class').textContent = capitalizeFirstLetter(data.class) || 'Mundano';
 
-    // Attributes handling
-    const agi = data.attributes?.agi || 0;
-    const force = data.attributes?.for || 0;
-    const intel = data.attributes?.int || 0;
-    const pre = data.attributes?.pre || 0;
-    const vig = data.attributes?.vig || 0;
+    // Attributes handling (remove leading zeros)
+    const agi = stripLeadingZeros(data.attributes?.agi || 0);
+    const force = stripLeadingZeros(data.attributes?.for || 0);
+    const intel = stripLeadingZeros(data.attributes?.int || 0);
+    const pre = stripLeadingZeros(data.attributes?.pre || 0);
+    const vig = stripLeadingZeros(data.attributes?.vig || 0);
 
     document.getElementById('vs-attr-agi').value = agi;
     document.getElementById('vs-attr-for').value = force;
@@ -1079,11 +1089,13 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('vs-attr-pre').value = pre;
     document.getElementById('vs-attr-vig').value = vig;
 
-    // NEX
+    // NEX (remove leading zeros)
     const nexBtn = document.getElementById('vs-nex');
     if (nexBtn) {
       const savedNex = data.nex || '0%';
-      nexBtn.childNodes[0].textContent = savedNex + ' ';
+      // Remove leading zeros: "05%" -> "5%"
+      const nexVal = savedNex.replace(/^0+(%|$)/, '$1').replace(/^$/, '0%');
+      nexBtn.childNodes[0].textContent = nexVal + ' ';
     }
 
     // Hardcode Skills visual representation for now
@@ -1306,8 +1318,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const nexBtn      = document.getElementById('vs-nex');
   const nexDropdown = document.getElementById('nex-dropdown');
 
-  // Build values: 0, 5, 10, ..., 95, 99
-  const NEX_VALUES = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50,
+  // Build values: 5, 10, 15, ..., 95, 99
+  const NEX_VALUES = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50,
                       55, 60, 65, 70, 75, 80, 85, 90, 95, 99];
 
   if (nexBtn && nexDropdown) {
@@ -1336,22 +1348,25 @@ document.addEventListener('DOMContentLoaded', () => {
     nexDropdown.addEventListener('click', (e) => {
       const opt = e.target.closest('.nex-option');
       if (!opt) return;
-      const val = opt.dataset.val;
+      let val = opt.dataset.val;
+
+      // Remove leading zeros (e.g., "05%" -> "5%")
+      val = val.replace(/^0+/, '');
 
       // Update button text (keep the chevron icon)
       nexBtn.childNodes[0].textContent = val + ' ';
 
-      // Highlight active option
+      // Highlight active option (compare using the cleaned value)
       nexDropdown.querySelectorAll('.nex-option').forEach(o =>
-        o.classList.toggle('active', o.dataset.val === val)
+        o.classList.toggle('active', o.dataset.val.replace(/^0+/, '') === val)
       );
 
-      // Persist to agent data
+      // Persist to agent data (remove leading zeros)
       const idx = sessionStorage.getItem('todo_active_agent_index');
       if (idx !== null && idx !== '') {
         const agents = JSON.parse(localStorage.getItem('todo_agents') || '[]');
         if (agents[idx]) {
-          agents[idx].nex = val;
+          agents[idx].nex = val.replace(/^0+(%|$)/, '$1').replace(/^$/, '0%');
           localStorage.setItem('todo_agents', JSON.stringify(agents));
         }
       }

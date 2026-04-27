@@ -1432,13 +1432,14 @@
             </div>
 
             <div class="op-banner">
-              <h2>SOBREVIVENDO <span style="font-size:0.6em; vertical-align:middle;">AO</span> HORROR</h2>
+              <h2>SOBREVIVENDO <span style="font-size:0.6em; vertical-align:middle;">AO</span> TODO</h2>
             </div>
 
             <div class="op-stats-row">
-              <div class="op-stat-box">
+              <div class="op-stat-box" id="nex-trigger-box" style="position: relative; cursor: pointer;">
                 <span class="op-label">NEX</span>
-                <div class="op-box-val" id="vs-nex">0%</div>
+                <button type="button" class="op-box-val" id="vs-nex" style="background: transparent; border: none; color: inherit; font: inherit; cursor: pointer; padding: 0; display: flex; align-items: center; gap: 4px;">0%<i class="fas fa-chevron-down" style="font-size: 0.6em;"></i></button>
+                <div id="nex-dropdown" class="nex-dropdown" aria-hidden="true"></div>
               </div>
               <div class="op-stat-box">
                 <div class="op-box-val">1</div>
